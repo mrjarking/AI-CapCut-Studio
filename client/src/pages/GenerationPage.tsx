@@ -3,10 +3,11 @@ import { useLocation, useParams } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import AppShell from "@/components/AppShell";
-import StatusBadge from "@/components/StatusBadge";
-import ProgressBar from "@/components/ProgressBar";
+import GenerationProgressPanel from "@/components/GenerationProgressPanel";
+import SceneProgressCard from "@/components/SceneProgressCard";
+import CompletionCelebration from "@/components/CompletionCelebration";
 import { Button } from "@/components/ui/button";
-import { Play, Pause, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
+import { Play, Pause, RefreshCw, ArrowRight } from "lucide-react";
 import type { Scene } from "@/types";
 
 export default function GenerationPage() {
@@ -23,7 +24,7 @@ export default function GenerationPage() {
     onSuccess: (results) => {
       const failed = results.filter((r) => r.status === "failed");
       if (failed.length > 0) toast.error(`${failed.length} 个镜头提交失败`);
-      else toast.success("所有镜头已提交生成");
+      else toast.success("所有镜头已提交，开始轮询状态");
       refetch();
       setPolling(true);
     },
@@ -31,16 +32,15 @@ export default function GenerationPage() {
   });
 
   const generateSingleMutation = trpc.video.generate.useMutation({
-    onSuccess: () => { refetch(); toast.success("镜头已提交"); },
+    onSuccess: () => {
+      refetch();
+      toast.success("镜头已提交生成");
+      setPolling(true);
+    },
     onError: (err) => toast.error(`提交失败: ${err.message}`),
   });
 
-  const getStatusQuery = trpc.video.getStatus.useQuery(
-    { taskId: "" },
-    { enabled: false }
-  );
-
-  // Polling
+  // Polling loop
   useEffect(() => {
     if (!polling || !project) return;
 
@@ -62,7 +62,7 @@ export default function GenerationPage() {
         try {
           await utils.video.getStatus.fetch({ taskId: scene.taskId });
         } catch {
-          // ignore
+          // ignore individual failures
         }
       }
       refetch();
@@ -77,15 +77,22 @@ export default function GenerationPage() {
   const scenes = [...(project?.scenes ?? [])].sort((a, b) => a.order - b.order);
   const completedCount = scenes.filter((s) => s.status === "completed").length;
   const failedCount = scenes.filter((s) => s.status === "failed").length;
-  const processingCount = scenes.filter((s) => ["submitted", "processing", "queued"].includes(s.status)).length;
+  const processingCount = scenes.filter((s) =>
+    ["submitted", "processing", "queued"].includes(s.status)
+  ).length;
+  const idleCount = scenes.filter((s) => s.status === "idle" || s.status === "pending").length;
   const totalCount = scenes.length;
-  const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
   const allCompleted = completedCount === totalCount && totalCount > 0;
 
   const handleGenerateAll = () => {
     if (!project) return;
-    const scenesToGenerate = scenes.filter((s) => s.status === "idle" || s.status === "failed");
-    if (scenesToGenerate.length === 0) { toast.info("所有镜头已生成或正在生成"); return; }
+    const scenesToGenerate = scenes.filter(
+      (s) => s.status === "idle" || s.status === "failed"
+    );
+    if (scenesToGenerate.length === 0) {
+      toast.info("所有镜头已生成或正在生成中");
+      return;
+    }
 
     generateBatchMutation.mutate({
       projectId: id,
@@ -119,177 +126,94 @@ export default function GenerationPage() {
   return (
     <AppShell title="生成任务队列" backHref={`/projects/${id}/model-settings`} showNav={false}>
       <div className="px-4 py-4 space-y-4">
-        {/* Progress Overview */}
-        <div className="glass-card p-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-semibold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-                {completedCount} / {totalCount} 镜头完成
-              </p>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                {processingCount > 0 && `${processingCount} 个生成中 · `}
-                {failedCount > 0 && `${failedCount} 个失败 · `}
-                {settings?.mockMode ? "Mock Mode" : "Real API"}
-              </p>
-            </div>
-            <span className="text-2xl font-bold gradient-text" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              {progress}%
-            </span>
-          </div>
-          <ProgressBar value={progress} showLabel={false} />
-        </div>
+        {/* ── Progress Overview Panel ── */}
+        <GenerationProgressPanel
+          totalCount={totalCount}
+          completedCount={completedCount}
+          processingCount={processingCount}
+          failedCount={failedCount}
+          idleCount={idleCount}
+          polling={polling}
+          mockMode={settings?.mockMode ?? true}
+          pollIntervalMs={settings?.pollIntervalMs ?? 5000}
+        />
 
-        {/* Controls */}
+        {/* ── Control Buttons ── */}
         <div className="flex gap-2">
           <Button
             onClick={handleGenerateAll}
-            disabled={generateBatchMutation.isPending || allCompleted}
-            className="flex-1 btn-gradient text-white text-sm"
+            disabled={generateBatchMutation.isPending || (allCompleted && failedCount === 0)}
+            className="flex-1 btn-gradient text-white text-sm h-10"
           >
             <Play size={14} className="mr-1.5" />
-            {generateBatchMutation.isPending ? "提交中..." : "生成全部镜头"}
+            {generateBatchMutation.isPending
+              ? "提交中…"
+              : failedCount > 0
+              ? `重试 ${failedCount} 个失败镜头`
+              : "生成全部镜头"}
           </Button>
+
           <Button
             variant="outline"
             size="icon"
             onClick={() => setPolling((v) => !v)}
-            className="border-border w-10 h-10"
-            title={polling ? "暂停轮询" : "继续轮询"}
+            className="border-border w-10 h-10 flex-shrink-0"
+            title={polling ? "暂停轮询" : "恢复轮询"}
           >
             {polling ? <Pause size={14} /> : <Play size={14} />}
           </Button>
+
           <Button
             variant="outline"
             size="icon"
             onClick={() => refetch()}
-            className="border-border w-10 h-10"
-            title="刷新状态"
+            className="border-border w-10 h-10 flex-shrink-0"
+            title="手动刷新"
           >
             <RefreshCw size={14} />
           </Button>
         </div>
 
-        {polling && (
-          <div className="flex items-center gap-2 text-xs text-[oklch(0.6_0.28_290)]">
-            <div className="w-1.5 h-1.5 rounded-full bg-[oklch(0.6_0.28_290)] animate-pulse" />
-            自动轮询中（每 {(settings?.pollIntervalMs ?? 5000) / 1000}s）
+        {/* ── Scene Cards ── */}
+        {scenes.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold px-0.5">
+              镜头列表 · {scenes.length} 个
+            </p>
+            {scenes.map((scene, idx) => (
+              <SceneProgressCard
+                key={scene.id}
+                scene={scene}
+                index={idx}
+                expanded={expandedId === scene.id}
+                onToggle={() =>
+                  setExpandedId(expandedId === scene.id ? null : scene.id)
+                }
+                onGenerate={() => handleGenerateSingle(scene)}
+                generating={generateSingleMutation.isPending}
+              />
+            ))}
           </div>
         )}
 
-        {/* Scene Cards */}
-        <div className="space-y-2">
-          {scenes.map((scene) => (
-            <SceneGenerationCard
-              key={scene.id}
-              scene={scene}
-              expanded={expandedId === scene.id}
-              onToggle={() => setExpandedId(expandedId === scene.id ? null : scene.id)}
-              onGenerate={() => handleGenerateSingle(scene)}
-              generating={generateSingleMutation.isPending}
-            />
-          ))}
-        </div>
-
-        {/* Next Step */}
+        {/* ── Next Step CTA ── */}
         {allCompleted && (
-          <div className="pb-4">
-            <div className="glass-card p-3 bg-[oklch(0.7_0.2_145/0.05)] border-[oklch(0.7_0.2_145/0.2)] mb-3">
-              <p className="text-xs text-[oklch(0.7_0.2_145)] font-medium">✓ 所有镜头生成完成！</p>
-            </div>
+          <div className="pb-4 space-y-3">
+            <CompletionCelebration
+              title="所有镜头已生成完成！"
+              description={`${completedCount} 个镜头全部生成成功，可以进入下一步进行视频拼接`}
+              variant="green"
+            />
             <Button
               onClick={() => navigate(`/projects/${id}/stitch`)}
               className="w-full btn-gradient text-white h-12 text-sm font-semibold"
             >
               进入视频拼接
+              <ArrowRight size={16} className="ml-2" />
             </Button>
           </div>
         )}
       </div>
     </AppShell>
-  );
-}
-
-function SceneGenerationCard({
-  scene,
-  expanded,
-  onToggle,
-  onGenerate,
-  generating,
-}: {
-  scene: Scene;
-  expanded: boolean;
-  onToggle: () => void;
-  onGenerate: () => void;
-  generating: boolean;
-}) {
-  const isActive = ["submitted", "processing", "queued"].includes(scene.status);
-
-  return (
-    <div className={`glass-card overflow-hidden transition-all ${isActive ? "border-[oklch(0.6_0.28_290/0.3)]" : ""}`}>
-      <button onClick={onToggle} className="w-full p-3 text-left">
-        <div className="flex items-center gap-3">
-          {/* Scene number with status indicator */}
-          <div className="relative flex-shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.6_0.28_290/0.2)] to-[oklch(0.7_0.22_200/0.2)] flex items-center justify-center">
-              <span className="text-xs font-bold text-[oklch(0.7_0.22_200)]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                {String(scene.order).padStart(2, "0")}
-              </span>
-            </div>
-            {isActive && (
-              <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-[oklch(0.6_0.28_290)] animate-pulse" />
-            )}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">{scene.goal}</p>
-            {scene.taskId && (
-              <p className="text-[10px] text-muted-foreground font-mono truncate">
-                {scene.taskId.slice(0, 20)}...
-              </p>
-            )}
-          </div>
-          <StatusBadge status={scene.status} />
-          {expanded ? <ChevronUp size={14} className="text-muted-foreground" /> : <ChevronDown size={14} className="text-muted-foreground" />}
-        </div>
-      </button>
-
-      {expanded && (
-        <div className="border-t border-border/50 p-3 space-y-3">
-          {scene.taskId && (
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Task ID</p>
-              <p className="text-xs font-mono text-foreground/70 break-all">{scene.taskId}</p>
-            </div>
-          )}
-          {scene.videoUrl && (
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">视频预览</p>
-              <video
-                src={scene.videoUrl}
-                controls
-                className="w-full rounded-lg max-h-48 bg-black"
-                playsInline
-              />
-            </div>
-          )}
-          {scene.errorMessage && (
-            <p className="text-xs text-[oklch(0.65_0.25_25)] bg-[oklch(0.65_0.25_25/0.1)] rounded-lg p-2">
-              {scene.errorMessage}
-            </p>
-          )}
-          <div className="flex gap-2">
-            {(scene.status === "idle" || scene.status === "failed") && (
-              <button
-                onClick={onGenerate}
-                disabled={generating}
-                className="flex items-center gap-1 text-xs text-[oklch(0.6_0.28_290)] hover:opacity-80 disabled:opacity-50"
-              >
-                <Play size={12} />
-                {scene.status === "failed" ? "重试" : "单独生成"}
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
   );
 }

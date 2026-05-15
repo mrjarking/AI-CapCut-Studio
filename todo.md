@@ -55,3 +55,12 @@
 - [x] 修复 zod v4 z.record() 需要两个参数的问题
 - [x] 修复 stitchService.ts TypeScript 错误
 - [x] TypeScript 检查：0 错误
+
+## 进度动画增强（新需求）
+- [x] 创建 GenerationProgressPanel 组件（圆弧总进度环 + 步骤列表）
+- [x] 创建 SceneProgressCard 组件（带动画状态指示器的镜头卡片）
+- [x] 创建 StitchProgressPanel 组件（分步进度：下载→转码→拼接→完成）
+- [x] 创建 CompletionCelebration 组件（completion-pop 动画 + 成功横幅）
+- [x] 更新 GenerationPage 使用新进度组件
+- [x] 更新 StitchPage 使用新进度组件
+- [x] 在 index.css 中添加进度动画关键帧（shimmer/indeterminate/completionPop/stepSlideIn）
