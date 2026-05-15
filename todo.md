@@ -78,3 +78,11 @@
 - [x] 修复 useEffect 依赖：不依赖 project 对象，改为依赖 polling 状态
 - [x] 轮询时直接从后端获取最新任务状态（utils.projects.get.fetch），不依赖旧闭包
 - [x] 确保 setPolling(true) 在 refetch 完成后才触发（await refetch() 先，再 setPolling）
+
+## 功能增强：预估剩余时间（新需求）
+- [x] 创建 useGenerationTimer hook（追踪每个镜头的开始时间、已用时间、预估剩余时间）
+- [x] 创建 GenerationTimeEstimate 组件（总体倒计时 + 进度环）
+- [x] 创建 SceneTimer 组件（单镜头倒计时条）
+- [x] 更新 GenerationProgressPanel 集成总体时间预估（TimeEstimateBanner）
+- [x] 更新 SceneProgressCard 集成单镜头计时条（SceneTimer）
+- [x] 更新 GenerationPage 传递计时数据，完成时显示实际用时

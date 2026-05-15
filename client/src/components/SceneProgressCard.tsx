@@ -12,6 +12,8 @@ import {
   RefreshCw,
 } from "lucide-react";
 import type { Scene } from "@/types";
+import type { SceneTimerInfo } from "@/hooks/useGenerationTimer";
+import SceneTimer from "./SceneTimer";
 
 interface SceneProgressCardProps {
   scene: Scene;
@@ -20,6 +22,7 @@ interface SceneProgressCardProps {
   onToggle: () => void;
   onGenerate: () => void;
   generating: boolean;
+  timerInfo?: SceneTimerInfo;
 }
 
 const STATUS_CONFIG = {
@@ -88,6 +91,7 @@ export default function SceneProgressCard({
   onToggle,
   onGenerate,
   generating,
+  timerInfo,
 }: SceneProgressCardProps) {
   const config = STATUS_CONFIG[scene.status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.idle;
   const isActive = ["submitted", "processing", "queued"].includes(scene.status);
@@ -161,23 +165,28 @@ export default function SceneProgressCard({
           )}
         </div>
 
-        {/* Inline progress bar for processing state */}
-        {isActive && (
-          <div className="mt-2.5 h-0.5 rounded-full overflow-hidden bg-[oklch(0.6_0.28_290/0.15)]">
-            <div
-              className="h-full rounded-full"
-              style={{
-                background: `linear-gradient(90deg, ${config.text}, oklch(0.7 0.22 200))`,
-                animation: "indeterminate 1.8s ease-in-out infinite",
-                backgroundSize: "200% 100%",
-              }}
-            />
-          </div>
-        )}
-
-        {/* Completed checkmark line */}
-        {isCompleted && (
-          <div className="mt-2 h-0.5 rounded-full bg-gradient-to-r from-[oklch(0.7_0.2_145)] to-[oklch(0.7_0.22_200)]" />
+        {/* Timer progress bar (replaces old indeterminate bar) */}
+        {timerInfo && (isActive || isCompleted) ? (
+          <SceneTimer timerInfo={timerInfo} status={scene.status} className="mt-2.5" />
+        ) : (
+          <>
+            {/* Fallback indeterminate bar when no timer */}
+            {isActive && (
+              <div className="mt-2.5 h-0.5 rounded-full overflow-hidden bg-[oklch(0.6_0.28_290/0.15)]">
+                <div
+                  className="h-full rounded-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${config.text}, oklch(0.7 0.22 200))`,
+                    animation: "indeterminate 1.8s ease-in-out infinite",
+                    backgroundSize: "200% 100%",
+                  }}
+                />
+              </div>
+            )}
+            {isCompleted && (
+              <div className="mt-2 h-0.5 rounded-full bg-gradient-to-r from-[oklch(0.7_0.2_145)] to-[oklch(0.7_0.22_200)]" />
+            )}
+          </>
         )}
       </button>
 

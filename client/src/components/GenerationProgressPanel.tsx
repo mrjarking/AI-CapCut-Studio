@@ -11,6 +11,10 @@ interface GenerationProgressPanelProps {
   polling: boolean;
   mockMode: boolean;
   pollIntervalMs: number;
+  // Timer props
+  overallElapsedSeconds?: number;
+  overallEstimatedRemainingSeconds?: number;
+  overallProgress?: number;
   className?: string;
 }
 
@@ -23,9 +27,14 @@ export default function GenerationProgressPanel({
   polling,
   mockMode,
   pollIntervalMs,
+  overallElapsedSeconds = 0,
+  overallEstimatedRemainingSeconds = 0,
+  overallProgress: timerProgress,
   className,
 }: GenerationProgressPanelProps) {
-  const progress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+  // Use timer-based progress if available, otherwise fall back to completion ratio
+  const completionProgress = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+  const progress = timerProgress !== undefined ? Math.round(timerProgress) : completionProgress;
   const allCompleted = completedCount === totalCount && totalCount > 0;
   const hasFailures = failedCount > 0;
 
@@ -159,25 +168,37 @@ export default function GenerationProgressPanel({
         allCompleted={allCompleted}
       />
 
-      {/* Polling indicator */}
+      {/* Polling indicator + time estimate */}
       {polling && (
-        <div className="mt-3 flex items-center gap-2">
-          <div className="flex gap-0.5">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="w-1 rounded-full bg-[oklch(0.6_0.28_290)]"
-                style={{
-                  height: "12px",
-                  animation: "soundwave 1s ease-in-out infinite",
-                  animationDelay: `${i * 0.15}s`,
-                }}
-              />
-            ))}
+        <div className="mt-3 space-y-2">
+          {/* Time estimate banner */}
+          {(overallElapsedSeconds > 0 || overallEstimatedRemainingSeconds > 0) && (
+            <TimeEstimateBanner
+              elapsedSeconds={overallElapsedSeconds}
+              remainingSeconds={overallEstimatedRemainingSeconds}
+              isMock={mockMode}
+              allCompleted={allCompleted}
+            />
+          )}
+          {/* Soundwave + poll interval */}
+          <div className="flex items-center gap-2">
+            <div className="flex gap-0.5">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="w-1 rounded-full bg-[oklch(0.6_0.28_290)]"
+                  style={{
+                    height: "12px",
+                    animation: "soundwave 1s ease-in-out infinite",
+                    animationDelay: `${i * 0.15}s`,
+                  }}
+                />
+              ))}
+            </div>
+            <span className="text-[10px] text-[oklch(0.6_0.28_290)]">
+              自动轮询中，每 {pollIntervalMs / 1000} 秒更新一次状态
+            </span>
           </div>
-          <span className="text-[10px] text-[oklch(0.6_0.28_290)]">
-            自动轮询中，每 {pollIntervalMs / 1000} 秒更新一次状态
-          </span>
         </div>
       )}
 
@@ -401,6 +422,122 @@ function SegmentedProgressBar({
         className="h-full bg-[oklch(0.65_0.25_25)] transition-all duration-700 ease-out"
         style={{ width: `${failedPct}%` }}
       />
+    </div>
+  );
+}
+
+// ─── Time Estimate Banner ────────────────────────────────────────────────────
+
+function formatDuration(seconds: number): string {
+  if (seconds <= 0) return "即将完成";
+  if (seconds < 60) return `约 ${Math.ceil(seconds)} 秒`;
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.ceil(seconds % 60);
+  if (secs === 0) return `约 ${mins} 分钟`;
+  return `约 ${mins} 分 ${secs} 秒`;
+}
+
+function formatElapsed(seconds: number): string {
+  if (seconds < 60) return `${seconds}s`;
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${String(secs).padStart(2, "0")}`;
+}
+
+function TimeEstimateBanner({
+  elapsedSeconds,
+  remainingSeconds,
+  isMock,
+  allCompleted,
+}: {
+  elapsedSeconds: number;
+  remainingSeconds: number;
+  isMock: boolean;
+  allCompleted: boolean;
+}) {
+  if (allCompleted) return null;
+
+  const isAlmostDone = remainingSeconds > 0 && remainingSeconds <= 10;
+  const isLongWait = !isMock && remainingSeconds > 60;
+
+  return (
+    <div
+      className={cn(
+        "flex items-center gap-3 rounded-xl px-3 py-2 border transition-all duration-500",
+        isAlmostDone
+          ? "bg-[oklch(0.7_0.2_145/0.08)] border-[oklch(0.7_0.2_145/0.25)]"
+          : "bg-[oklch(0.6_0.28_290/0.06)] border-[oklch(0.6_0.28_290/0.2)]"
+      )}
+    >
+      {/* Animated hourglass / timer icon */}
+      <div
+        className={cn(
+          "text-base flex-shrink-0",
+          isAlmostDone ? "animate-bounce" : ""
+        )}
+      >
+        {isAlmostDone ? "⏰" : "⏳"}
+      </div>
+
+      {/* Main time info */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-1.5 flex-wrap">
+          <span className="text-[10px] text-muted-foreground">预计剩余</span>
+          <span
+            className={cn(
+              "text-sm font-bold tabular-nums transition-colors duration-500",
+              isAlmostDone
+                ? "text-[oklch(0.7_0.2_145)]"
+                : "text-[oklch(0.6_0.28_290)]"
+            )}
+            style={{ fontFamily: "'JetBrains Mono', monospace" }}
+          >
+            {remainingSeconds <= 0 ? "即将完成…" : formatDuration(remainingSeconds)}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-[9px] text-muted-foreground/60">
+            已用时 {formatElapsed(elapsedSeconds)}
+          </span>
+          {isLongWait && (
+            <span className="text-[9px] text-[oklch(0.78_0.18_85)]">
+              · 实际时间因队列而异
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Remaining time progress dots */}
+      <TimeProgressDots remainingSeconds={remainingSeconds} isMock={isMock} />
+    </div>
+  );
+}
+
+function TimeProgressDots({
+  remainingSeconds,
+  isMock,
+}: {
+  remainingSeconds: number;
+  isMock: boolean;
+}) {
+  const totalSeconds = isMock ? 8 : 120;
+  const elapsed = totalSeconds - remainingSeconds;
+  const pct = Math.min(1, Math.max(0, elapsed / totalSeconds));
+  const filledDots = Math.round(pct * 5);
+
+  return (
+    <div className="flex gap-1 flex-shrink-0">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          key={i}
+          className={cn(
+            "w-1.5 h-1.5 rounded-full transition-all duration-500",
+            i < filledDots
+              ? "bg-[oklch(0.6_0.28_290)]"
+              : "bg-[oklch(0.6_0.28_290/0.2)]"
+          )}
+        />
+      ))}
     </div>
   );
 }

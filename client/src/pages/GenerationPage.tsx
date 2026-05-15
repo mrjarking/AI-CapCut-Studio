@@ -8,6 +8,8 @@ import SceneProgressCard from "@/components/SceneProgressCard";
 import CompletionCelebration from "@/components/CompletionCelebration";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RefreshCw, ArrowRight } from "lucide-react";
+import { useGenerationTimer } from "@/hooks/useGenerationTimer";
+import GenerationTimeEstimate from "@/components/GenerationTimeEstimate";
 import type { Scene } from "@/types";
 
 export default function GenerationPage() {
@@ -27,6 +29,12 @@ export default function GenerationPage() {
   // Keep refs in sync
   projectIdRef.current = id;
   pollingRef.current = polling;
+
+  // ── Timer hook ─────────────────────────────────────────────────────────────
+  const scenes = [...(project?.scenes ?? [])].sort((a, b) => a.order - b.order);
+  const isMock = settings?.mockMode ?? true;
+
+  const timerState = useGenerationTimer(scenes, polling, isMock);
 
   // ── Core polling function (uses refs, not closures) ──────────────────────
   const runPoll = useCallback(async () => {
@@ -68,7 +76,6 @@ export default function GenerationPage() {
   // ── Start / stop polling ──────────────────────────────────────────────────
   useEffect(() => {
     if (!polling) {
-      // Stop polling
       if (pollRef.current) {
         clearInterval(pollRef.current);
         pollRef.current = null;
@@ -76,13 +83,11 @@ export default function GenerationPage() {
       return;
     }
 
-    // Start polling — run immediately once, then on interval
     const pollInterval = settings?.pollIntervalMs ?? 5000;
 
     // Small delay to let the generate mutation's refetch complete first
     const startTimeout = setTimeout(async () => {
       await runPoll();
-      // Only set up interval if still polling
       if (pollingRef.current) {
         pollRef.current = setInterval(runPoll, pollInterval);
       }
@@ -95,7 +100,6 @@ export default function GenerationPage() {
         pollRef.current = null;
       }
     };
-    // NOTE: intentionally NOT including project in deps to avoid stale closure resets
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [polling, settings?.pollIntervalMs]);
 
@@ -108,7 +112,6 @@ export default function GenerationPage() {
       } else {
         toast.success("所有镜头已提交，开始轮询状态");
       }
-      // Refetch first, then start polling after data is fresh
       await refetch();
       setPolling(true);
     },
@@ -118,7 +121,6 @@ export default function GenerationPage() {
   const generateSingleMutation = trpc.video.generate.useMutation({
     onSuccess: async () => {
       toast.success("镜头已提交生成");
-      // Refetch first to get the updated taskId, then start polling
       await refetch();
       setPolling(true);
     },
@@ -126,7 +128,6 @@ export default function GenerationPage() {
   });
 
   // ── Derived state ──────────────────────────────────────────────────────────
-  const scenes = [...(project?.scenes ?? [])].sort((a, b) => a.order - b.order);
   const completedCount = scenes.filter((s) => s.status === "completed").length;
   const failedCount = scenes.filter((s) => s.status === "failed").length;
   const processingCount = scenes.filter((s) =>
@@ -176,15 +177,11 @@ export default function GenerationPage() {
     });
   };
 
-  const handleTogglePolling = () => {
-    setPolling((v) => !v);
-  };
-
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <AppShell title="生成任务队列" backHref={`/projects/${id}/model-settings`} showNav={false}>
       <div className="px-4 py-4 space-y-4">
-        {/* ── Progress Overview Panel ── */}
+        {/* ── Progress Overview Panel (with timer) ── */}
         <GenerationProgressPanel
           totalCount={totalCount}
           completedCount={completedCount}
@@ -192,8 +189,11 @@ export default function GenerationPage() {
           failedCount={failedCount}
           idleCount={idleCount}
           polling={polling}
-          mockMode={settings?.mockMode ?? true}
+          mockMode={isMock}
           pollIntervalMs={settings?.pollIntervalMs ?? 5000}
+          overallElapsedSeconds={timerState.overallElapsedSeconds}
+          overallEstimatedRemainingSeconds={timerState.overallEstimatedRemainingSeconds}
+          overallProgress={timerState.overallProgress}
         />
 
         {/* ── Control Buttons ── */}
@@ -218,7 +218,7 @@ export default function GenerationPage() {
           <Button
             variant="outline"
             size="icon"
-            onClick={handleTogglePolling}
+            onClick={() => setPolling((v) => !v)}
             className="border-border w-10 h-10 flex-shrink-0"
             title={polling ? "暂停轮询" : "恢复轮询"}
           >
@@ -236,8 +236,19 @@ export default function GenerationPage() {
           </Button>
         </div>
 
+        {/* ── Time Estimate (standalone component) ── */}
+        <GenerationTimeEstimate
+          polling={polling}
+          completedCount={completedCount}
+          totalCount={totalCount}
+          overallElapsedSeconds={timerState.overallElapsedSeconds}
+          overallEstimatedRemainingSeconds={timerState.overallEstimatedRemainingSeconds}
+          overallProgress={timerState.overallProgress}
+          isMock={isMock}
+        />
+
         {/* Real API queue tip */}
-        {!settings?.mockMode && processingCount > 0 && (
+        {!isMock && processingCount > 0 && (
           <div className="rounded-xl bg-[oklch(0.78_0.18_85/0.06)] border border-[oklch(0.78_0.18_85/0.2)] px-3 py-2">
             <p className="text-[10px] text-[oklch(0.78_0.18_85)] leading-relaxed">
               <span className="font-semibold">提示：</span>Real API 生成通常需要 1-5 分钟。若长时间停留在排队状态，可能是服务商队列繁忙，请耐心等待或切换至 Mock Mode 演示。
@@ -245,7 +256,7 @@ export default function GenerationPage() {
           </div>
         )}
 
-        {/* ── Scene Cards ── */}
+        {/* ── Scene Cards (with per-scene timer) ── */}
         {scenes.length > 0 && (
           <div className="space-y-2">
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-semibold px-0.5">
@@ -262,6 +273,7 @@ export default function GenerationPage() {
                 }
                 onGenerate={() => handleGenerateSingle(scene)}
                 generating={generateSingleMutation.isPending}
+                timerInfo={timerState.sceneTimers[scene.id]}
               />
             ))}
           </div>
@@ -272,7 +284,13 @@ export default function GenerationPage() {
           <div className="pb-4 space-y-3">
             <CompletionCelebration
               title="所有镜头已生成完成！"
-              description={`${completedCount} 个镜头全部生成成功，可以进入下一步进行视频拼接`}
+              description={`${completedCount} 个镜头全部生成成功，共用时 ${
+                timerState.overallElapsedSeconds > 0
+                  ? timerState.overallElapsedSeconds < 60
+                    ? `${timerState.overallElapsedSeconds} 秒`
+                    : `${Math.floor(timerState.overallElapsedSeconds / 60)} 分 ${timerState.overallElapsedSeconds % 60} 秒`
+                  : "若干时间"
+              }`}
               variant="green"
             />
             <Button
