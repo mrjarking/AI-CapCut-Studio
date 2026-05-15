@@ -1,0 +1,35 @@
+{
+  "build_command": "pnpm run build",
+  "capabilities": [],
+  "dev_command": "pnpm run dev",
+  "env_vars": {},
+  "experiments": null,
+  "git_remote": {
+    "repo_url": "s3://vida-prod-gitrepo/webdev-git/310519663167379149/G8ewQUy2m3QdfupnFLQVpg",
+    "access_key_id": "ASIAZV3A2ECZD44AWOK6",
+    "secret_access_key": "MG48xWP1ASvBscDoEW98Y0beFbXcffCy6HKQD4M0",
+    "session_token": "IQoJb3JpZ2luX2VjEKv//////////wEaCXVzLWVhc3QtMSJGMEQCIDwLhwPRpMgQE69EVwUUsDhZ5O+/+K00v4AzGBhnc0g2AiB25qJoT24SwcnUUJgYGUKoLNBolMQ5JkfMab15I6pLkCr2Awh0EAQaDDY2NTM4NjA5ODg2NiIMrEciwYQCedueRuNBKtMDhVFzHoDVDvDTzUaRbv8VEmpDUpA942rFAT7zw1AoUVUm5adkvTvNHNNjC/CXSFcVamM7iDBLdW23HrDLgqA32FCWMFlFTmjnI6E5kFeFqTDQPE2WFpScv/81Mz6cXf7ndELXNOlAittBRMBwzpL8O9qmxtRdaH53RpZfRUVIjwgZZV4NsybvyunCjFXoa7qb1KLXPdaAUjMvkpUgZQuHljd99lw3Fv+3GNqRnO4Xp33Jb/503PKFq6NAvjJDr2rjgkCFPV9M5yrNA0ZYeuNwvreFTEs88agWvBQF9USwmTn20f7ft0Tx6vSyfq60mE2yCVfN1/4VmK51vxo8yuGwwrUIgZmq1XwM7M1h7LpRcJ2T4x0I7xSeSerGj4C4k0m+mv0moIKhBVKRm8D+GVNiBQixSJTC8R8augd3ofURF5LnJez1plFSD4rA7s9jIu+mK3/qT1nzG2XSRYw/uidZ4K9dbJeoXM61KcqScQw/kpTl9BJ3X+nGRYVyVyDpCTcMnxEpt6xKx4PO3FEQs/Pz6oEZB2ETIwVDmGUXYakLgkYigj4Tz5ZTUATVg2lEy+LGXioMmkd+4/BmocRIjtHaZwo6yn/ipwEeum20k2bM1hN1nLEwxfKb0AY6ngEYWe6NUqVja9lwRfRPvd8F+YOJrfAhGs01ZnGJ9KWBqVBu1wLf63HvCxM6i5cIB/0z0R9TSL7DGCiZHleWp3iChKUPJbiI++/q+quhvv862nmv+E5U5XsRA9E4k1S7v8j3EkUaJBj1EhdcMjnQ0x2qMY5i0yP0kC8rM29xXKA1g+n6V3y7qAB73zXhglKvNEo9gIbM9hUc1bHh87MFrw==",
+    "expiration": "2026-05-15T22:45:25.000Z"
+  },
+  "name": "cisum-ai-video-studio",
+  "path": "/home/ubuntu/cisum-ai-video-studio",
+  "port": 3000,
+  "secrets": {
+    "BUILT_IN_FORGE_API_KEY": "VTsQ5xSXPeSCZJJZLKyzfY",
+    "BUILT_IN_FORGE_API_URL": "https://forge.manus.ai",
+    "JWT_SECRET": "GbECih7v34cmmYKyvr5nPh",
+    "OAUTH_SERVER_URL": "https://api.manus.im",
+    "OWNER_NAME": "King Chan",
+    "OWNER_OPEN_ID": "8xQiCG2k7tLuz4fS9DERQG",
+    "VITE_ANALYTICS_ENDPOINT": "https://manus-analytics.com",
+    "VITE_ANALYTICS_WEBSITE_ID": "33ee8fac-7835-434c-a622-97b747366262",
+    "VITE_APP_ID": "G8ewQUy2m3QdfupnFLQVpg",
+    "VITE_APP_LOGO": "",
+    "VITE_APP_TITLE": "CisuMusic AI Video Studio",
+    "VITE_FRONTEND_FORGE_API_KEY": "FEfL74Un7esFM3YkXqAi8T",
+    "VITE_FRONTEND_FORGE_API_URL": "https://forge.manus.ai",
+    "VITE_OAUTH_PORTAL_URL": "https://manus.im"
+  },
+  "template_id": "web-static",
+  "test_command": "pnpm test"
+}
