@@ -24,8 +24,20 @@ export async function getSettings(): Promise<AppSettings> {
   return readJson<AppSettings>(SETTINGS_FILE, DEFAULT_SETTINGS);
 }
 
+// Map deprecated model names to their current equivalents
+const MODEL_ALIASES: Record<string, string> = {
+  "veo3_fast": "veo3.1-fast",
+  "veo3": "veo3.1-fast",  // veo3 alone is often not available; prefer veo3.1-fast
+};
+
 export async function saveSettings(partial: Partial<AppSettings>): Promise<AppSettings> {
   const current = await getSettings();
+
+  // Normalize model name if deprecated alias is used
+  if (partial.defaultModel && MODEL_ALIASES[partial.defaultModel]) {
+    partial = { ...partial, defaultModel: MODEL_ALIASES[partial.defaultModel] };
+  }
+
   const updated: AppSettings = {
     ...current,
     ...partial,

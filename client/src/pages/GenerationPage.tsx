@@ -106,20 +106,35 @@ export default function GenerationPage() {
   // ── Mutations ──────────────────────────────────────────────────────────────
   const generateBatchMutation = trpc.video.generateBatch.useMutation({
     onSuccess: async (results) => {
-      const failed = results.filter((r) => r.status === "failed");
-      if (failed.length > 0) {
-        toast.error(`${failed.length} 个镜头提交失败`);
+      const failed = results.filter((r) => r.status === "failed" || !r.taskId);
+      const succeeded = results.filter((r) => r.status !== "failed" && !!r.taskId);
+
+      if (failed.length > 0 && succeeded.length === 0) {
+        // All failed — show first error message
+        const firstErr = failed[0]?.errorMessage || "生成请求全部失败，请检查模型名称和 API 配置";
+        toast.error(firstErr, { duration: 8000 });
+        await refetch();
+        return;
+      } else if (failed.length > 0) {
+        toast.warning(`${failed.length} 个镜头提交失败，${succeeded.length} 个已提交生成`);
       } else {
         toast.success("所有镜头已提交，开始轮询状态");
       }
       await refetch();
-      setPolling(true);
+      if (succeeded.length > 0) setPolling(true);
     },
     onError: (err) => toast.error(`批量生成失败: ${err.message}`),
   });
 
   const generateSingleMutation = trpc.video.generate.useMutation({
-    onSuccess: async () => {
+    onSuccess: async (result) => {
+      if (result.status === "failed" || !result.taskId) {
+        // Generation failed at API level — show error and do NOT start polling
+        const errMsg = result.errorMessage || "生成请求失败，请检查模型名称和 API 配置";
+        toast.error(errMsg, { duration: 6000 });
+        await refetch(); // refresh to show failed status on the scene card
+        return;
+      }
       toast.success("镜头已提交生成");
       await refetch();
       setPolling(true);

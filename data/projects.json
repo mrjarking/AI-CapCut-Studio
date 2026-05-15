@@ -460,8 +460,9 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "submitted",
+        "retryCount": 0,
+        "taskId": "80dd5d343497c07e3a51ea2cb9bc5791"
       },
       {
         "id": "f8b15a63-705b-45bf-8e0b-f0c9642ce759",
@@ -602,7 +603,7 @@
     ],
     "status": "storyboard",
     "createdAt": 1778864787397,
-    "updatedAt": 1778864889607,
+    "updatedAt": 1778868047885,
     "brief": {
       "title": "2Z新歌速递：60秒K-Pop风暴来袭！",
       "coreSellingPoints": [

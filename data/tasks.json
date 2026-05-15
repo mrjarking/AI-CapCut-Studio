@@ -173,5 +173,15 @@
     "updatedAt": 1778864471019,
     "retryCount": 0,
     "videoUrl": "/static/mock/mock_003.mp4"
+  },
+  {
+    "taskId": "80dd5d343497c07e3a51ea2cb9bc5791",
+    "projectId": "39858e34-245f-4122-a687-ad434c61beab",
+    "sceneId": "2e1c9583-efef-4a99-97b6-721ef2feaee8",
+    "provider": "veo3",
+    "status": "submitted",
+    "createdAt": 1778868047881,
+    "updatedAt": 1778868047881,
+    "retryCount": 0
   }
 ]

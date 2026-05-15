@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useParams } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -14,7 +14,7 @@ export default function ModelSettingsPage() {
   const utils = trpc.useUtils();
 
   const [form, setForm] = useState({
-    defaultModel: settings?.defaultModel ?? "mock",
+    defaultModel: settings?.defaultModel ?? "veo3.1-fast",
     watermark: settings?.watermark ?? "CisuMusic",
     generateAudio: settings?.generateAudio ?? true,
     seed: settings?.seed ?? null as number | null,
@@ -22,6 +22,22 @@ export default function ModelSettingsPage() {
     pollIntervalMs: settings?.pollIntervalMs ?? 5000,
     maxSceneDurationSeconds: settings?.maxSceneDurationSeconds ?? 8,
   });
+
+  // Sync form when settings load (avoids stale defaults)
+  useEffect(() => {
+    if (settings) {
+      setForm((f) => ({
+        ...f,
+        defaultModel: settings.defaultModel || "veo3.1-fast",
+        watermark: settings.watermark,
+        generateAudio: settings.generateAudio,
+        seed: settings.seed,
+        maxRetries: settings.maxRetries,
+        pollIntervalMs: settings.pollIntervalMs,
+        maxSceneDurationSeconds: settings.maxSceneDurationSeconds,
+      }));
+    }
+  }, [settings?.defaultModel]);
 
   const saveMutation = trpc.settings.save.useMutation({
     onSuccess: () => {
@@ -33,11 +49,12 @@ export default function ModelSettingsPage() {
   });
 
   const PRESET_MODELS = [
-    { name: "veo3", desc: "高质量，约 $0.5-1.0 / 镜头" },
-    { name: "veo3_fast", desc: "快速，约 $0.2-0.4 / 镜头" },
-    { name: "veo3.1-fast", desc: "veo3.1 快速版" },
+    { name: "veo3.1-fast", desc: "推荐 · 快速模式，约 $0.2-0.4 / 镜头" },
+    { name: "veo3.1", desc: "高质量模式，约 $0.5-1.0 / 镜头" },
+    { name: "veo3.1-pro", desc: "专业级模式" },
     { name: "mock", desc: "免费（Mock 演示模式）" },
   ];
+  // Note: veo3_fast is deprecated, use veo3.1-fast instead
 
   return (
     <AppShell title="模型配置" backHref={`/projects/${id}/storyboard`} showNav={false}>

@@ -86,3 +86,10 @@
 - [x] 更新 GenerationProgressPanel 集成总体时间预估（TimeEstimateBanner）
 - [x] 更新 SceneProgressCard 集成单镜头计时条（SceneTimer）
 - [x] 更新 GenerationPage 传递计时数据，完成时显示实际用时
+
+## Bug 修复：模型名称错误导致生成失败（新需求）
+- [x] 更新 settings.local.json 的 defaultModel 为 veo3.1-fast
+- [x] 更新 ModelSettingsPage 预设模型列表，移除无效的 veo3_fast，添加 veo3.1-fast/veo3.1/veo3.1-pro
+- [x] 在 settingsService.saveSettings 中添加模型别名映射（veo3_fast → veo3.1-fast），防止旧名称被保存
+- [x] 修复 generateSingleMutation/generateBatchMutation onSuccess：检查 result.status，失败时显示错误而不启动轮询
+- [x] ModelSettingsPage 添加 useEffect 同步设置，防止页面加载时使用旧默认值
