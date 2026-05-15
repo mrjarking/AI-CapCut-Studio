@@ -93,3 +93,7 @@
 - [x] 在 settingsService.saveSettings 中添加模型别名映射（veo3_fast → veo3.1-fast），防止旧名称被保存
 - [x] 修复 generateSingleMutation/generateBatchMutation onSuccess：检查 result.status，失败时显示错误而不启动轮询
 - [x] ModelSettingsPage 添加 useEffect 同步设置，防止页面加载时使用旧默认值
+
+## Bug 修复：艺人选择页面无选择项（新需求）
+- [x] 排查 KnowledgePage 艺人数据加载问题
+- [x] 修复艺人列表：添加加载骨架屏和空状态提示，确保数据加载前不显示空白

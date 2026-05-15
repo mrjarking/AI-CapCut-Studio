@@ -460,9 +460,10 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "submitted",
+        "status": "processing",
         "retryCount": 0,
-        "taskId": "80dd5d343497c07e3a51ea2cb9bc5791"
+        "taskId": "80dd5d343497c07e3a51ea2cb9bc5791",
+        "errorMessage": "状态查询失败，稍后可重试"
       },
       {
         "id": "f8b15a63-705b-45bf-8e0b-f0c9642ce759",
@@ -478,8 +479,10 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "e71351ad8cf11af0e4ab59900a53251f",
+        "errorMessage": "状态查询失败，稍后可重试"
       },
       {
         "id": "1c8374b9-2248-4e08-8255-76dfa5cbd47a",
@@ -495,8 +498,10 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "469ec16fcdcea43c03ff3d0a31b1d979",
+        "errorMessage": "状态查询失败，稍后可重试"
       },
       {
         "id": "c2bc6314-ac0f-4862-8a7b-42d57e8d1019",
@@ -512,8 +517,10 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "ac39f53cf8d6c68b018a95cdb5ad04e4",
+        "errorMessage": "状态查询失败，稍后可重试"
       },
       {
         "id": "55cf4d84-38c2-4439-a2cd-e40f746ced56",
@@ -529,8 +536,10 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "ee80e8b7c71ed5acb9c132d7ca11cb3e",
+        "errorMessage": "状态查询失败，稍后可重试"
       },
       {
         "id": "2da9fbb1-dc9b-4330-a449-d11e79bcd80a",
@@ -546,8 +555,10 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "7c8c93975e3a67ec620cf3397d2ce45d",
+        "errorMessage": "状态查询失败，稍后可重试"
       },
       {
         "id": "bf1a548f-c05c-4e88-a0e2-ef62bed548be",
@@ -563,8 +574,10 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "b8552734b009e4e87baeac13503e768e",
+        "errorMessage": "状态查询失败，稍后可重试"
       },
       {
         "id": "ac23243a-08ef-44ae-bfef-b1430779d6ea",
@@ -580,8 +593,10 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "e77c4b2deef7dbe882324664a9e110a9",
+        "errorMessage": "状态查询失败，稍后可重试"
       },
       {
         "id": "aba9fd06-29d4-4008-8d0f-df2fa1639aad",
@@ -597,13 +612,15 @@
         "musicSuggestion": "2Z新歌的高潮部分（副歌或hook），选择最抓耳、最具节奏感和辨识度的片段。",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "49ca8c3749e8ac626fd97ea6f2bce5b7",
+        "errorMessage": "状态查询失败，稍后可重试"
       }
     ],
     "status": "storyboard",
     "createdAt": 1778864787397,
-    "updatedAt": 1778868047885,
+    "updatedAt": 1778869567446,
     "brief": {
       "title": "2Z新歌速递：60秒K-Pop风暴来袭！",
       "coreSellingPoints": [

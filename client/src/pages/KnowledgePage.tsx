@@ -10,7 +10,7 @@ export default function KnowledgePage() {
   const { id } = useParams<{ id: string }>();
   const [, navigate] = useLocation();
   const { data: project } = trpc.projects.get.useQuery({ id });
-  const { data: artists } = trpc.media.artists.useQuery();
+  const { data: artists, isLoading: artistsLoading } = trpc.media.artists.useQuery();
 
   const [selected, setSelected] = useState<string[]>(project?.selectedKnowledgeModules ?? []);
 
@@ -77,6 +77,21 @@ export default function KnowledgePage() {
             已选 {selected.length} / {artist?.knowledgeModules.length ?? 0} 个模块
           </p>
           <div className="space-y-2">
+            {artistsLoading ? (
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="glass-card p-4 animate-pulse">
+                  <div className="h-4 bg-white/10 rounded mb-2 w-2/3" />
+                  <div className="h-3 bg-white/5 rounded w-full" />
+                </div>
+              ))
+            ) : !artist ? (
+              <div className="text-center py-8 text-sm text-muted-foreground">
+                <p>未找到对应艺人的知识库</p>
+                <p className="text-xs mt-1">artistId: {project?.artistId || '未设置'}</p>
+              </div>
+            ) : artist.knowledgeModules.length === 0 ? (
+              <div className="text-center py-8 text-sm text-muted-foreground">该艺人暂无知识库模块</div>
+            ) : null}
             {artist?.knowledgeModules.map((module) => {
               const isSelected = selected.includes(module.id);
               return (

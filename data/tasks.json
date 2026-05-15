@@ -179,9 +179,98 @@
     "projectId": "39858e34-245f-4122-a687-ad434c61beab",
     "sceneId": "2e1c9583-efef-4a99-97b6-721ef2feaee8",
     "provider": "veo3",
-    "status": "submitted",
+    "status": "processing",
     "createdAt": 1778868047881,
-    "updatedAt": 1778868047881,
-    "retryCount": 0
+    "updatedAt": 1778869563238,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "e71351ad8cf11af0e4ab59900a53251f",
+    "projectId": "39858e34-245f-4122-a687-ad434c61beab",
+    "sceneId": "f8b15a63-705b-45bf-8e0b-f0c9642ce759",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778868436220,
+    "updatedAt": 1778869567444,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "469ec16fcdcea43c03ff3d0a31b1d979",
+    "projectId": "39858e34-245f-4122-a687-ad434c61beab",
+    "sceneId": "1c8374b9-2248-4e08-8255-76dfa5cbd47a",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778869294757,
+    "updatedAt": 1778869535956,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "ac39f53cf8d6c68b018a95cdb5ad04e4",
+    "projectId": "39858e34-245f-4122-a687-ad434c61beab",
+    "sceneId": "c2bc6314-ac0f-4862-8a7b-42d57e8d1019",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778869295733,
+    "updatedAt": 1778869540134,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "ee80e8b7c71ed5acb9c132d7ca11cb3e",
+    "projectId": "39858e34-245f-4122-a687-ad434c61beab",
+    "sceneId": "55cf4d84-38c2-4439-a2cd-e40f746ced56",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778869296730,
+    "updatedAt": 1778869544437,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "7c8c93975e3a67ec620cf3397d2ce45d",
+    "projectId": "39858e34-245f-4122-a687-ad434c61beab",
+    "sceneId": "2da9fbb1-dc9b-4330-a449-d11e79bcd80a",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778869297464,
+    "updatedAt": 1778869548141,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "b8552734b009e4e87baeac13503e768e",
+    "projectId": "39858e34-245f-4122-a687-ad434c61beab",
+    "sceneId": "bf1a548f-c05c-4e88-a0e2-ef62bed548be",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778869298235,
+    "updatedAt": 1778869552080,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "e77c4b2deef7dbe882324664a9e110a9",
+    "projectId": "39858e34-245f-4122-a687-ad434c61beab",
+    "sceneId": "ac23243a-08ef-44ae-bfef-b1430779d6ea",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778869299214,
+    "updatedAt": 1778869556033,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "49ca8c3749e8ac626fd97ea6f2bce5b7",
+    "projectId": "39858e34-245f-4122-a687-ad434c61beab",
+    "sceneId": "aba9fd06-29d4-4008-8d0f-df2fa1639aad",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778869299961,
+    "updatedAt": 1778869560010,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
   }
 ]

@@ -30,7 +30,7 @@ const RATIOS: AspectRatio[] = ["9:16", "16:9", "1:1"];
 
 export default function NewProjectPage() {
   const [, navigate] = useLocation();
-  const { data: artists } = trpc.media.artists.useQuery();
+  const { data: artists, isLoading: artistsLoading } = trpc.media.artists.useQuery();
 
   const [form, setForm] = useState({
     name: "",
@@ -102,20 +102,34 @@ export default function NewProjectPage() {
         {/* Artist */}
         <Section title="选择艺人">
           <div className="grid grid-cols-2 gap-2">
-            {artists?.map((a) => (
-              <button
-                key={a.id}
-                onClick={() => setForm((f) => ({ ...f, artistId: a.id, artistName: a.name }))}
-                className={`glass-card p-3 text-left transition-all duration-200 ${
-                  form.artistId === a.id
-                    ? "border-[oklch(0.6_0.28_290/0.6)] bg-[oklch(0.6_0.28_290/0.08)]"
-                    : "border-border hover:bg-white/[0.02]"
-                }`}
-              >
-                <p className="text-sm font-semibold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{a.name}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{a.country} · {a.type}</p>
-              </button>
-            ))}
+            {artistsLoading ? (
+              // Loading skeleton
+              Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="glass-card p-3 animate-pulse">
+                  <div className="h-4 bg-white/10 rounded mb-1.5 w-3/4" />
+                  <div className="h-3 bg-white/5 rounded w-1/2" />
+                </div>
+              ))
+            ) : artists && artists.length > 0 ? (
+              artists.map((a) => (
+                <button
+                  key={a.id}
+                  onClick={() => setForm((f) => ({ ...f, artistId: a.id, artistName: a.name }))}
+                  className={`glass-card p-3 text-left transition-all duration-200 ${
+                    form.artistId === a.id
+                      ? "border-[oklch(0.6_0.28_290/0.6)] bg-[oklch(0.6_0.28_290/0.08)]"
+                      : "border-border hover:bg-white/[0.02]"
+                  }`}
+                >
+                  <p className="text-sm font-semibold" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{a.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{a.country} · {a.type}</p>
+                </button>
+              ))
+            ) : (
+              <div className="col-span-2 text-center py-6 text-sm text-muted-foreground">
+                暂无艺人数据，请检查后端服务
+              </div>
+            )}
           </div>
         </Section>
 
