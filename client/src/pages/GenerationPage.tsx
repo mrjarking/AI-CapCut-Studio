@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation, useParams } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -17,63 +17,115 @@ export default function GenerationPage() {
   const { data: settings } = trpc.settings.get.useQuery();
   const [polling, setPolling] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  // Use refs to avoid stale closures in the polling interval
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const projectIdRef = useRef(id);
+  const pollingRef = useRef(false);
   const utils = trpc.useUtils();
 
-  const generateBatchMutation = trpc.video.generateBatch.useMutation({
-    onSuccess: (results) => {
-      const failed = results.filter((r) => r.status === "failed");
-      if (failed.length > 0) toast.error(`${failed.length} 个镜头提交失败`);
-      else toast.success("所有镜头已提交，开始轮询状态");
+  // Keep refs in sync
+  projectIdRef.current = id;
+  pollingRef.current = polling;
+
+  // ── Core polling function (uses refs, not closures) ──────────────────────
+  const runPoll = useCallback(async () => {
+    if (!pollingRef.current) return;
+
+    try {
+      // Fetch latest project data directly (avoids stale closure)
+      const latestProject = await utils.projects.get.fetch({ id: projectIdRef.current });
+      if (!latestProject) return;
+
+      const activeTasks = latestProject.scenes.filter(
+        (s) => s.taskId && ["submitted", "processing", "queued"].includes(s.status)
+      );
+
+      if (activeTasks.length === 0) {
+        // No more active tasks — stop polling and refresh UI
+        setPolling(false);
+        refetch();
+        return;
+      }
+
+      // Query status for each active task
+      for (const scene of activeTasks) {
+        if (!scene.taskId) continue;
+        try {
+          await utils.video.getStatus.fetch({ taskId: scene.taskId });
+        } catch {
+          // ignore individual failures, keep polling
+        }
+      }
+
+      // Refresh the project data in the UI
       refetch();
+    } catch {
+      // Network error — keep polling, will retry next interval
+    }
+  }, [utils, refetch]);
+
+  // ── Start / stop polling ──────────────────────────────────────────────────
+  useEffect(() => {
+    if (!polling) {
+      // Stop polling
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+      return;
+    }
+
+    // Start polling — run immediately once, then on interval
+    const pollInterval = settings?.pollIntervalMs ?? 5000;
+
+    // Small delay to let the generate mutation's refetch complete first
+    const startTimeout = setTimeout(async () => {
+      await runPoll();
+      // Only set up interval if still polling
+      if (pollingRef.current) {
+        pollRef.current = setInterval(runPoll, pollInterval);
+      }
+    }, 1500);
+
+    return () => {
+      clearTimeout(startTimeout);
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+    };
+    // NOTE: intentionally NOT including project in deps to avoid stale closure resets
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [polling, settings?.pollIntervalMs]);
+
+  // ── Mutations ──────────────────────────────────────────────────────────────
+  const generateBatchMutation = trpc.video.generateBatch.useMutation({
+    onSuccess: async (results) => {
+      const failed = results.filter((r) => r.status === "failed");
+      if (failed.length > 0) {
+        toast.error(`${failed.length} 个镜头提交失败`);
+      } else {
+        toast.success("所有镜头已提交，开始轮询状态");
+      }
+      // Refetch first, then start polling after data is fresh
+      await refetch();
       setPolling(true);
     },
     onError: (err) => toast.error(`批量生成失败: ${err.message}`),
   });
 
   const generateSingleMutation = trpc.video.generate.useMutation({
-    onSuccess: () => {
-      refetch();
+    onSuccess: async () => {
       toast.success("镜头已提交生成");
+      // Refetch first to get the updated taskId, then start polling
+      await refetch();
       setPolling(true);
     },
     onError: (err) => toast.error(`提交失败: ${err.message}`),
   });
 
-  // Polling loop
-  useEffect(() => {
-    if (!polling || !project) return;
-
-    const pollInterval = settings?.pollIntervalMs ?? 5000;
-
-    const poll = async () => {
-      const activeTasks = project.scenes.filter(
-        (s) => s.taskId && ["submitted", "processing", "queued"].includes(s.status)
-      );
-
-      if (activeTasks.length === 0) {
-        setPolling(false);
-        refetch();
-        return;
-      }
-
-      for (const scene of activeTasks) {
-        if (!scene.taskId) continue;
-        try {
-          await utils.video.getStatus.fetch({ taskId: scene.taskId });
-        } catch {
-          // ignore individual failures
-        }
-      }
-      refetch();
-    };
-
-    pollRef.current = setInterval(poll, pollInterval);
-    return () => {
-      if (pollRef.current) clearInterval(pollRef.current);
-    };
-  }, [polling, project, settings?.pollIntervalMs]);
-
+  // ── Derived state ──────────────────────────────────────────────────────────
   const scenes = [...(project?.scenes ?? [])].sort((a, b) => a.order - b.order);
   const completedCount = scenes.filter((s) => s.status === "completed").length;
   const failedCount = scenes.filter((s) => s.status === "failed").length;
@@ -84,6 +136,7 @@ export default function GenerationPage() {
   const totalCount = scenes.length;
   const allCompleted = completedCount === totalCount && totalCount > 0;
 
+  // ── Handlers ──────────────────────────────────────────────────────────────
   const handleGenerateAll = () => {
     if (!project) return;
     const scenesToGenerate = scenes.filter(
@@ -123,6 +176,11 @@ export default function GenerationPage() {
     });
   };
 
+  const handleTogglePolling = () => {
+    setPolling((v) => !v);
+  };
+
+  // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <AppShell title="生成任务队列" backHref={`/projects/${id}/model-settings`} showNav={false}>
       <div className="px-4 py-4 space-y-4">
@@ -142,7 +200,11 @@ export default function GenerationPage() {
         <div className="flex gap-2">
           <Button
             onClick={handleGenerateAll}
-            disabled={generateBatchMutation.isPending || (allCompleted && failedCount === 0)}
+            disabled={
+              generateBatchMutation.isPending ||
+              generateSingleMutation.isPending ||
+              (allCompleted && failedCount === 0)
+            }
             className="flex-1 btn-gradient text-white text-sm h-10"
           >
             <Play size={14} className="mr-1.5" />
@@ -156,7 +218,7 @@ export default function GenerationPage() {
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setPolling((v) => !v)}
+            onClick={handleTogglePolling}
             className="border-border w-10 h-10 flex-shrink-0"
             title={polling ? "暂停轮询" : "恢复轮询"}
           >

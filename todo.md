@@ -72,3 +72,9 @@
 - [x] 更新 SetupPage 和 SettingsPage，允许用户配置 API 路径和模型名称
 - [x] 更新 routers.ts 中 settings 的 save 接口，支持 generateApiPath/statusApiPath/defaultModel
 - [x] 修复 Mock Mode 下前端 provider 判断逻辑（确认正常）
+
+## Bug 修复：轮询竞态条件（新需求）
+- [x] 重写 GenerationPage 轮询逻辑：用 useRef + useCallback，避免 stale closure
+- [x] 修复 useEffect 依赖：不依赖 project 对象，改为依赖 polling 状态
+- [x] 轮询时直接从后端获取最新任务状态（utils.projects.get.fetch），不依赖旧闭包
+- [x] 确保 setPolling(true) 在 refetch 完成后才触发（await refetch() 先，再 setPolling）
