@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
-import { Eye, EyeOff, Zap, Shield, Wifi } from "lucide-react";
+import { Eye, EyeOff, Zap, Shield, Wifi, ChevronDown, ChevronUp, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,12 +10,15 @@ import { Label } from "@/components/ui/label";
 export default function SetupPage() {
   const [, navigate] = useLocation();
   const [showToken, setShowToken] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [form, setForm] = useState({
     apiBaseUrl: "",
     apiToken: "",
     apiProvider: "mock" as "veo3" | "mock",
-    defaultModel: "mock" as "veo3" | "veo3_fast" | "mock",
+    defaultModel: "mock",
     mockMode: true,
+    generateApiPath: "",
+    statusApiPath: "",
   });
 
   const saveMutation = trpc.settings.save.useMutation({
@@ -147,29 +150,55 @@ export default function SetupPage() {
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-xs text-muted-foreground">API Provider</Label>
-                <select
-                  value={form.apiProvider}
-                  onChange={(e) => setForm((f) => ({ ...f, apiProvider: e.target.value as "veo3" | "mock" }))}
-                  className="w-full h-9 px-3 rounded-md text-sm"
-                >
-                  <option value="veo3">Veo3 Compatible API</option>
-                  <option value="mock">Mock Mode</option>
-                </select>
+                <Label className="text-xs text-muted-foreground">默认模型名称</Label>
+                <Input
+                  placeholder="例如: veo3, veo3_fast, veo3.1-fast"
+                  value={form.defaultModel === "mock" ? "" : form.defaultModel}
+                  onChange={(e) => setForm((f) => ({ ...f, defaultModel: e.target.value || "veo3" }))}
+                  className="text-sm"
+                />
+                <p className="text-[10px] text-muted-foreground">
+                  填写 API 服务商支持的模型名称，不同服务商可能不同
+                </p>
               </div>
 
-              <div className="space-y-1.5">
-                <Label className="text-xs text-muted-foreground">默认模型</Label>
-                <select
-                  value={form.defaultModel}
-                  onChange={(e) => setForm((f) => ({ ...f, defaultModel: e.target.value as "veo3" | "veo3_fast" | "mock" }))}
-                  className="w-full h-9 px-3 rounded-md text-sm"
-                >
-                  <option value="veo3">veo3（高质量）</option>
-                  <option value="veo3_fast">veo3_fast（快速）</option>
-                  <option value="mock">mock（演示）</option>
-                </select>
-              </div>
+              {/* Advanced Settings */}
+              <button
+                onClick={() => setShowAdvanced((v) => !v)}
+                className="w-full flex items-center justify-between text-xs text-muted-foreground hover:text-foreground transition-colors py-1"
+              >
+                <span className="flex items-center gap-1.5">
+                  <Info size={12} />
+                  高级：自定义 API 路径（可选）
+                </span>
+                {showAdvanced ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+              </button>
+
+              {showAdvanced && (
+                <div className="space-y-3 rounded-xl bg-[oklch(0.6_0.28_290/0.04)] border border-[oklch(0.6_0.28_290/0.1)] p-3">
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">
+                    如果 API 服务商使用非标准路径，可在此指定。留空则自动探测（优先尝试 <code className="font-mono">/v1/video/generations</code>）。
+                  </p>
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] text-muted-foreground">生成接口路径</Label>
+                    <Input
+                      placeholder="/v1/video/generations"
+                      value={form.generateApiPath}
+                      onChange={(e) => setForm((f) => ({ ...f, generateApiPath: e.target.value }))}
+                      className="text-xs font-mono"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label className="text-[10px] text-muted-foreground">状态查询路径（用 {"{taskId}"} 占位）</Label>
+                    <Input
+                      placeholder="/v1/video/generations/{taskId}"
+                      value={form.statusApiPath}
+                      onChange={(e) => setForm((f) => ({ ...f, statusApiPath: e.target.value }))}
+                      className="text-xs font-mono"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

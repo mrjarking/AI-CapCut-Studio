@@ -32,11 +32,12 @@ export default function ModelSettingsPage() {
     onError: (err) => toast.error(`保存失败: ${err.message}`),
   });
 
-  const COST_MAP: Record<string, string> = {
-    veo3: "约 $0.5-1.0 / 镜头",
-    veo3_fast: "约 $0.2-0.4 / 镜头",
-    mock: "免费（Mock 模式）",
-  };
+  const PRESET_MODELS = [
+    { name: "veo3", desc: "高质量，约 $0.5-1.0 / 镜头" },
+    { name: "veo3_fast", desc: "快速，约 $0.2-0.4 / 镜头" },
+    { name: "veo3.1-fast", desc: "veo3.1 快速版" },
+    { name: "mock", desc: "免费（Mock 演示模式）" },
+  ];
 
   return (
     <AppShell title="模型配置" backHref={`/projects/${id}/storyboard`} showNav={false}>
@@ -44,24 +45,24 @@ export default function ModelSettingsPage() {
         {/* Model */}
         <Section title="默认模型">
           <div className="space-y-2">
-            {(["veo3", "veo3_fast", "mock"] as const).map((m) => (
+            {PRESET_MODELS.map((m) => (
               <button
-                key={m}
-                onClick={() => setForm((f) => ({ ...f, defaultModel: m }))}
+                key={m.name}
+                onClick={() => setForm((f) => ({ ...f, defaultModel: m.name }))}
                 className={`w-full glass-card p-3 flex items-center justify-between text-left transition-all ${
-                  form.defaultModel === m
+                  form.defaultModel === m.name
                     ? "border-[oklch(0.6_0.28_290/0.5)] bg-[oklch(0.6_0.28_290/0.06)]"
                     : "border-border"
                 }`}
               >
                 <div>
-                  <p className="text-sm font-medium" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{m}</p>
-                  <p className="text-xs text-muted-foreground">{COST_MAP[m]}</p>
+                  <p className="text-sm font-medium" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{m.name}</p>
+                  <p className="text-xs text-muted-foreground">{m.desc}</p>
                 </div>
                 <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                  form.defaultModel === m ? "border-[oklch(0.6_0.28_290)]" : "border-border"
+                  form.defaultModel === m.name ? "border-[oklch(0.6_0.28_290)]" : "border-border"
                 }`}>
-                  {form.defaultModel === m && <div className="w-2 h-2 rounded-full bg-[oklch(0.6_0.28_290)]" />}
+                  {form.defaultModel === m.name && <div className="w-2 h-2 rounded-full bg-[oklch(0.6_0.28_290)]" />}
                 </div>
               </button>
             ))}
@@ -172,9 +173,9 @@ export default function ModelSettingsPage() {
 
         {/* Cost Estimate */}
         <div className="glass-card p-3 bg-[oklch(0.78_0.18_85/0.05)] border-[oklch(0.78_0.18_85/0.2)]">
-          <p className="text-xs font-medium text-[oklch(0.78_0.18_85)] mb-1">成本预估</p>
+          <p className="text-xs font-medium text-[oklch(0.78_0.18_85)] mb-1">当前模型</p>
           <p className="text-xs text-muted-foreground">
-            当前模型：{form.defaultModel} · {COST_MAP[form.defaultModel]}
+            {form.defaultModel || "(未设置)"}
           </p>
         </div>
 

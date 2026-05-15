@@ -64,3 +64,11 @@
 - [x] 更新 GenerationPage 使用新进度组件
 - [x] 更新 StitchPage 使用新进度组件
 - [x] 在 index.css 中添加进度动画关键帧（shimmer/indeterminate/completionPop/stepSlideIn）
+
+## Bug 修复：生成功能无效（新需求）
+- [x] 更新 AppSettings 类型，添加 generateApiPath 和 statusApiPath 字段
+- [x] 重写 veo3Adapter，支持自动探测路径（优先 /v1/video/generations），兼容嵌套响应格式
+- [x] 更新 settingsService 默认值
+- [x] 更新 SetupPage 和 SettingsPage，允许用户配置 API 路径和模型名称
+- [x] 更新 routers.ts 中 settings 的 save 接口，支持 generateApiPath/statusApiPath/defaultModel
+- [x] 修复 Mock Mode 下前端 provider 判断逻辑（确认正常）

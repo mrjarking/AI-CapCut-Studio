@@ -44,7 +44,7 @@ const settingsRouter = router({
         apiBaseUrl: z.string().optional(),
         apiToken: z.string().optional(),
         apiProvider: z.enum(["veo3", "mock"]).optional(),
-        defaultModel: z.enum(["veo3", "veo3_fast", "mock"]).optional(),
+        defaultModel: z.string().optional(),
         mockMode: z.boolean().optional(),
         watermark: z.string().optional(),
         generateAudio: z.boolean().optional(),
@@ -52,6 +52,8 @@ const settingsRouter = router({
         maxRetries: z.number().optional(),
         pollIntervalMs: z.number().optional(),
         maxSceneDurationSeconds: z.number().optional(),
+        generateApiPath: z.string().optional(),
+        statusApiPath: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
@@ -197,7 +199,7 @@ const videoRouter = router({
         imageUrls: z.array(z.string()).optional(),
         aspectRatio: z.enum(["9:16", "16:9", "1:1"]),
         durationSeconds: z.number(),
-        model: z.enum(["veo3", "veo3_fast", "mock"]).optional(),
+        model: z.string().optional(),
         watermark: z.string().optional(),
         generateAudio: z.boolean().optional(),
         seed: z.number().optional(),

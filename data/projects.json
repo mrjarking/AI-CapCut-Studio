@@ -38,8 +38,10 @@
         "musicSuggestion": "A powerful, original 2Z track with a strong, driving beat and catchy chorus, or an instrumental version of their most popular song that builds intensity throughout the video.",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "ea4c8cd3dc8533e270100367c2c196e8",
+        "errorMessage": "状态查询失败，稍后可重试"
       },
       {
         "id": "c8c9b0fc-e00f-4966-85a8-f1e8fc918b83",
@@ -140,8 +142,10 @@
         "musicSuggestion": "A powerful, original 2Z track with a strong, driving beat and catchy chorus, or an instrumental version of their most popular song that builds intensity throughout the video.",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "completed",
+        "retryCount": 0,
+        "taskId": "mock_eee3e97c6b564898",
+        "videoUrl": "/static/mock/mock_005.mp4"
       },
       {
         "id": "524dacf8-1a5a-41b2-aa0c-c3c1f886da6d",
@@ -157,8 +161,10 @@
         "musicSuggestion": "A powerful, original 2Z track with a strong, driving beat and catchy chorus, or an instrumental version of their most popular song that builds intensity throughout the video.",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "completed",
+        "retryCount": 0,
+        "taskId": "mock_5eff66cfd3a5407a",
+        "videoUrl": "/static/mock/mock_001.mp4"
       },
       {
         "id": "b9af6a7e-8c35-4a7b-aad4-ecc78cd49c9d",
@@ -178,31 +184,32 @@
         "retryCount": 0
       }
     ],
-    "status": "storyboard",
+    "status": "briefing",
     "createdAt": 1778854320569,
-    "updatedAt": 1778854392943,
+    "updatedAt": 1778862498522,
     "brief": {
-      "title": "2Z Global Tour: Electrify Your Night!",
+      "title": "2Z LIVE: The Ultimate K-Pop Concert Experience Promo!",
       "coreSellingPoints": [
-        "High-energy K-Pop performance",
-        "Exclusive concert footage sneak peek",
-        "Interactive fan experience teased"
+        "High-energy K-Pop choreography",
+        "Dynamic stage presence of 2Z",
+        "Exclusive concert footage snippets",
+        "Interactive fan experience teasers"
       ],
-      "targetAudience": "K-Pop fans, particularly those interested in boy groups and high-energy performances, aged 16-30.",
+      "targetAudience": "K-Pop fans, particularly those interested in boy groups, live music events, and energetic performances, aged 13-35.",
       "emotionKeywords": [
         "Excitement",
-        "Anticipation",
         "Energy",
+        "Anticipation",
         "Joy",
-        "Connection"
+        "Passion"
       ],
-      "storyline": "A fast-paced montage showcasing 2Z's powerful stage presence, intricate choreography, and charismatic close-ups, interspersed with quick cuts of cheering fans, leading to a reveal of concert dates and ticket information.",
-      "videoStructure": "0-5s: Quick, impactful cuts of 2Z's most iconic dance moves and stage presence with a strong beat drop. 5-20s: Montage of energetic performance clips, close-ups of members, and fan interactions. 20-40s: Highlight reel of concert moments, showing diverse stages and audience engagement, with dynamic text overlays. 40-55s: Build-up to concert announcement, showing suspenseful visuals and revealing tour dates/cities. 55-60s: Call to action with ticket purchase information and official tour hashtag.",
-      "subtitleStyle": "Bold, dynamic K-Pop MV-style text, using bright colors (e.g., neon pink, electric blue) that flash and animate with the beat, primarily for key messages and tour details.",
-      "voiceoverStyle": "Energetic, enthusiastic, and confident male voiceover (English) during transitions and for key announcements, building excitement and urgency.",
-      "musicSuggestion": "A powerful, original 2Z track with a strong, driving beat and catchy chorus, or an instrumental version of their most popular song that builds intensity throughout the video.",
-      "socialMediaTips": "Utilize trending TikTok sounds and challenges related to K-Pop. Encourage user-generated content (UGC) by asking fans to share their favorite 2Z moments or anticipation. Use relevant hashtags like #2ZGlobalTour #KPopConcert #2ZLive #ConcertPromo. Collaborate with K-Pop influencers for cross-promotion.",
-      "ctaSuggestion": "Text overlay: 'GET YOUR TICKETS NOW!' followed by 'Link in Bio' and 'Visit 2Zofficial.com/tour' with a clear, direct call to action to purchase tickets."
+      "storyline": "A fast-paced montage of 2Z's most iconic concert moments, showcasing their powerful vocals, synchronized dance moves, and captivating stage visuals. Interspersed with quick cuts of fan reactions, light sticks, and the overall electric atmosphere of a K-Pop concert. The narrative builds to a climax, teasing the upcoming concert as an unmissable event.",
+      "videoStructure": "0-10s: Quick cuts of high-energy performance snippets, close-ups of 2Z members, impactful beats. 10-25s: Focus on intricate choreography and powerful vocal moments, interspersed with crowd shots. 25-40s: Behind-the-scenes glimpses or rehearsal shots (if available) hinting at the hard work, followed by more live performance highlights with special effects. 40-55s: Title card with concert details (date, city, ticket info) with exciting background music and quick flashes of 2Z. 55-60s: Strong call to action to buy tickets.",
+      "subtitleStyle": "Dynamic, animated K-Pop style subtitles for lyrics or key messages, using bold, vibrant colors that pop against the video, with occasional motion graphics.",
+      "voiceoverStyle": "Energetic and enthusiastic male voiceover, speaking in English, building excitement and emphasizing key concert details. Should be brief and impactful.",
+      "musicSuggestion": "A high-tempo, instrumental K-Pop track with strong beats and a catchy melody, preferably an instrumental version of one of 2Z's popular songs, or a custom track that matches their sound. The music should build in intensity throughout the video.",
+      "socialMediaTips": "Utilize relevant hashtags like #2Z #KPopConcert #LiveMusic #ConcertPromo #KPopIdol. Encourage user-generated content by asking fans to share their favorite 2Z moments or what they're most excited for. Run a TikTok challenge related to a 2Z dance move. Collaborate with K-Pop fan accounts for wider reach.",
+      "ctaSuggestion": "Text overlay: 'Tickets On Sale Now!' and 'Link in Bio to Get Your Tickets!' accompanied by a clear visual of a 'Buy Tickets' button. Verbal CTA: 'Don't miss 2Z Live! Get your tickets today!'"
     }
   }
 ]

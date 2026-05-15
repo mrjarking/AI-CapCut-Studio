@@ -19,7 +19,7 @@ export interface GenerateVideoRequest {
   imageUrls?: string[];
   aspectRatio: "9:16" | "16:9" | "1:1";
   durationSeconds: number;
-  model?: "veo3" | "veo3_fast" | "mock";
+  model?: string; // flexible model name, e.g. "veo3", "veo3_fast", "veo3.1-fast", "mock"
   resolution?: "720p" | "1080p";
   seed?: number;
   watermark?: string;
@@ -59,7 +59,7 @@ export interface AppSettings {
   apiBaseUrl: string;
   apiToken: string;
   apiProvider: "veo3" | "mock";
-  defaultModel: "veo3" | "veo3_fast" | "mock";
+  defaultModel: string; // flexible model name, e.g. "veo3", "veo3_fast", "veo3.1-fast", "mock"
   mockMode: boolean;
   watermark: string;
   generateAudio: boolean;
@@ -68,6 +68,9 @@ export interface AppSettings {
   pollIntervalMs: number;
   maxSceneDurationSeconds: number;
   isConfigured: boolean;
+  // Custom API paths (leave empty to use defaults)
+  generateApiPath: string; // e.g. "/v1/video/generations" or "/api/v1/veo/generate"
+  statusApiPath: string;   // e.g. "/v1/video/generations/{taskId}" or "/api/v1/veo/record-info"
 }
 
 // ─── Project & Scene ─────────────────────────────────────────────────────────

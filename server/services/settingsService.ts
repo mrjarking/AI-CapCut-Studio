@@ -16,6 +16,8 @@ const DEFAULT_SETTINGS: AppSettings = {
   pollIntervalMs: 5000,
   maxSceneDurationSeconds: 8,
   isConfigured: false,
+  generateApiPath: "",
+  statusApiPath: "",
 };
 
 export async function getSettings(): Promise<AppSettings> {

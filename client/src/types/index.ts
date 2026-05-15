@@ -112,7 +112,7 @@ export interface AppSettings {
   apiBaseUrl: string;
   maskedToken: string;
   apiProvider: "veo3" | "mock";
-  defaultModel: "veo3" | "veo3_fast" | "mock";
+  defaultModel: string;
   mockMode: boolean;
   watermark: string;
   generateAudio: boolean;
@@ -121,6 +121,8 @@ export interface AppSettings {
   pollIntervalMs: number;
   maxSceneDurationSeconds: number;
   isConfigured: boolean;
+  generateApiPath: string;
+  statusApiPath: string;
 }
 
 export const VIDEO_GOAL_LABELS: Record<VideoGoal, string> = {

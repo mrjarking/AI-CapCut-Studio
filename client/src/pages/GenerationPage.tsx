@@ -174,6 +174,15 @@ export default function GenerationPage() {
           </Button>
         </div>
 
+        {/* Real API queue tip */}
+        {!settings?.mockMode && processingCount > 0 && (
+          <div className="rounded-xl bg-[oklch(0.78_0.18_85/0.06)] border border-[oklch(0.78_0.18_85/0.2)] px-3 py-2">
+            <p className="text-[10px] text-[oklch(0.78_0.18_85)] leading-relaxed">
+              <span className="font-semibold">提示：</span>Real API 生成通常需要 1-5 分钟。若长时间停留在排队状态，可能是服务商队列繁忙，请耐心等待或切换至 Mock Mode 演示。
+            </p>
+          </div>
+        )}
+
         {/* ── Scene Cards ── */}
         {scenes.length > 0 && (
           <div className="space-y-2">
