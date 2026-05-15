@@ -1,638 +1,257 @@
-# Web App Template (Static Frontend)
+# CisuMusic AI Video Studio
 
-Pure React 19 + Tailwind 4 template with shadcn/ui baked in. **Use this README as the checklist for shipping static experiences.**
-
-> **Note:** This template includes a minimal `shared/` and `server/` directory with placeholder types to support imported templates. These are just compatibility placeholders - web-static remains a true static-only template without API functionality.
+> 面向音乐艺人平台运营人员的 AI 宣发短视频生成 H5 工具
 
 ---
 
-## Stack Overview
-- Client-only routing powered by React + Wouter.
-- Design tokens live entirely in `client/src/index.css`—keep that file intact.
+## 项目介绍
 
-## File Structure
+CisuMusic AI Video Studio 是一个完整的 AI 视频生成 Web 应用，专为音乐艺人平台的运营人员、粉丝运营人员和内容编辑人员设计。系统基于艺人知识库、社交媒体素材与平台运营数据，通过分镜分段生成 AI 视频片段，再由后端 FFmpeg 自动拼接为最终完整视频。
 
-```
-client/
-  public/       ← Small configuration files ONLY (favicon.ico, robots.txt). DO NOT put images/media here.
-  src/
-    pages/      ← Page-level components
-    components/ ← Reusable UI & shadcn/ui
-    contexts/   ← React contexts
-    hooks/      ← Custom React hooks
-    lib/        ← Utility helpers
-    App.tsx     ← Routes & top-level layout
-    main.tsx    ← React entry point
-    index.css   ← global style
-server/         ← Placeholder for imported template compatibility
-shared/         ← Placeholder for imported template compatibility
-  const.ts      ← Shared constants
-```
+**核心特性：**
 
-### ⚠️ Handling Images & Media
-
-**DO NOT** store images, videos, or large assets in `client/public/` or `client/src/assets/`. Local media files will cause deployment timeouts.
-
-**Required workflow:**
-1. Upload assets using the CLI: `manus-upload-file --webdev path/to/image.png`
-2. Use the returned storage path directly in your code: `<img src="/manus-storage/image_a1b2c3d4.png" />`
-3. Store the original local file in `/home/ubuntu/webdev-static-assets/` (outside the project directory)
-
-Only small configuration files like `favicon.ico`, `robots.txt`, and `manifest.json` belong in `client/public/`.
-
-Files in `client/public` are available at the root of your site—reference them with absolute paths (`/robots.txt`, etc.) from HTML templates, JSX, or meta tags.
+- 完整的 AI 视频生成工作流（15 步）
+- 分镜分段生成，每个镜头独立提交 AI 任务
+- 后端代理 AI API，Token 不暴露给前端
+- Mock Mode 支持完整演示，无需真实 API
+- FFmpeg 自动拼接所有片段为最终 MP4
+- 移动端优先 H5 设计，430px 竖屏布局
+- 深色赛博音浪风格 UI
 
 ---
 
-## 🎯 Development Workflow
+## 功能列表
 
-1. **Choose a design style** before you write any frontend code according to Design Guide (color, font, shadow, art style). Tell user what you chose. Remember to edit `client/src/index.css` for global theming and add needed font using google font cdn in `client/index.html`.
-2. **Compose pages** in `client/src/pages/`. Keep sections modular so they can be reused across routes.
-3. **Share primitives** via `client/src/components/`—extend shadcn/ui when needed instead of duplicating markup.
-4. **Keep styling consistent** by relying on existing Tailwind tokens (spacing, colors, typography).
-5. **Fetch external data** with `useEffect` if the site needs dynamic content from public APIs.
----
-
-## 🎨 Frontend Development Guidelines
-
-**UI & Styling:**
-- Prefer shadcn/ui components for interactions to keep a modern, consistent look; import from `@/components/ui/*` (e.g., `button`, `card`, `dialog`).
-- Compose Tailwind utilities with component variants for layout and states; avoid excessive custom CSS. Use built-in `variant`, `size`, etc. where available.
-- Preserve design tokens: keep the `@layer base` rules in `client/src/index.css`. Utilities like `border-border` and `font-sans` depend on them.
-- Consistent design language: use spacing, radius, shadows, and typography via tokens. Extract shared UI into `components/` for reuse instead of copy‑paste.
-- Accessibility and responsiveness: keep visible focus rings and ensure keyboard reachability; design mobile‑first with thoughtful breakpoints.
-- Theming: Choose dark/light theme to start with for ThemeProvider according to your design style (dark or light bg), then manage colors pallette with CSS variables in `client/src/index.css` instead of hard‑coding to keep global consistency.
-- Micro‑interactions and empty states: add motion, empty states, and icons tastefully to improve quality without distracting from content.
-- Navigation: For internal tools/admin panels, use persistent sidebar. For public-facing apps, design navigation based on content structure (top nav, side nav, or contextual)—ensure clear escape routes from all pages.
-- Placeholder UI elements: When adding structural placeholders (nav items, CTAs) for not-yet-implemented features, show toast on click ("Feature coming soon"). Inform user which elements are placeholders when presenting work.
-
-**React Best Practices:**
-- Never call setState/navigation in render phase → wrap in `useEffect`
-
-**Customized Defaults:**
-This template customizes some Tailwind/shadcn defaults for simplified usage:
-- `.container` is customized to auto-center and add responsive padding (see `index.css`). Use directly without `mx-auto`/`px-*`. For custom widths, use `max-w-*` with `mx-auto px-4`.
-- `.flex` is customized to have `min-width:0` and `min-height:0` by default
-- `button` variant `outline` uses transparent background (not `bg-background`). Add bg color class manually if needed.
+| 功能模块 | 说明 |
+|---------|------|
+| API 配置 | 首次运行配置 API Base URL 和 Token，支持 Mock Mode |
+| 艺人知识库 | 内置 4 位艺人（2Z、MINH、Nghịch、Vũ Thanh Vân）及知识模块 |
+| 素材库 | 内置 Mock 素材，支持搜索、分类、多选 |
+| 视频策划案 | AI 自动生成，包含标题、卖点、故事线等 11 个字段，可编辑 |
+| 分镜脚本 | AI 自动拆分镜头，生成英文 Prompt，支持编辑、排序、删除 |
+| 模型配置 | 支持 veo3/veo3_fast/mock，水印、音频、种子等参数 |
+| 批量生成 | 一键提交所有镜头，自动轮询状态 |
+| 单镜头操作 | 单独生成、重试、查看 taskId 和视频 URL |
+| 视频拼接 | 后端下载片段，FFmpeg concat demuxer 拼接 |
+| 预览下载 | H5 视频播放器，支持下载最终 MP4 |
+| 导出功能 | 项目 JSON、分镜 Markdown、Prompt 包、SRT 字幕、发布文案 |
+| 历史项目 | 查看、复制、删除、继续编辑 |
+| 系统设置 | 修改 API 配置、切换模式、测试连接 |
 
 ---
 
-## 🎨 Design Guide
+## 技术栈
 
-When generating frontend UI, avoid generic patterns that lack visual distinction:
-- Avoid generic full-page centered layouts—prefer asymmetric/sidebar/grid structures for landing pages and dashboards
-- When user provides vague requirements, make creative design decisions (choose specific color palette, typography, layout approach)
-- Prioritize visual diversity: combine different design systems (e.g., one color scheme + different typography + another layout principle)
-- For landing pages: prefer asymmetric layouts, specific color values (not just "blue"), and textured backgrounds over flat colors
-- For dashboards: use defined spacing systems, soft shadows over borders, and accent colors for hierarchy
+**前端**
 
----
+- React 19 + TypeScript
+- Vite 7
+- Tailwind CSS 4
+- tRPC 11（类型安全 API 调用）
+- Wouter（路由）
+- Sonner（Toast 通知）
+- Space Grotesk + Inter + JetBrains Mono 字体
 
-## Animation Guide
+**后端**
 
-Bake motion taste in from the first line of code. Snappy, physically intuitive interactions are not a polish pass — they are part of the initial build.
-- Decide whether to animate at all: keyboard-initiated actions (command palettes, shortcuts) must be instant — never animate them. High-frequency interactions (hover, list nav) should be minimal. Reserve richer motion for occasional events (modals, drawers, toasts) and rare delight moments (onboarding).
-- Keep UI animations under 300ms. A 180ms dropdown feels significantly better than a 400ms one. Typical ranges: button press 100–160ms, tooltips 125–200ms, dropdowns 150–250ms, modals/drawers 200–500ms.
-- Use strong custom easings, not the weak CSS defaults. Default to a snappy ease-out for entering/exiting UI: `--ease-out: cubic-bezier(0.23, 1, 0.32, 1);`. For moving/morphing use `--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);`. NEVER use `ease-in` for UI animations — it feels sluggish.
-- Buttons must feel responsive: add `transform: scale(0.97)` on `:active` with a ~160ms ease-out transition so the UI confirms it heard the user.
-- Never animate from `scale(0)` — nothing in the real world appears from nothing. Start from `scale(0.95)` combined with `opacity: 0`.
-- Origin-aware popovers/dropdowns: scale in from the trigger point (e.g. `transform-origin: var(--radix-popover-content-transform-origin)`). Modals are the exception and stay centered.
-- Prefer CSS transitions over @keyframes for dynamic UI state. Transitions can be interrupted and reversed smoothly mid-flight; keyframes restart from zero and feel broken when interrupted.
-- Only animate `transform` and `opacity` for motion — they run on the GPU and skip layout/paint. Avoid animating `width`, `height`, `padding`, `margin`, `top/left` unless absolutely necessary.
-- Stagger grouped entrances by 30–80ms per item to create a cascading reveal instead of a wall of motion.
-- Asymmetric timing for deliberate actions: hold-to-confirm should be slow and linear on press (e.g. 2s linear), but release/cancel should snap back fast (~200ms ease-out).
-- Respect `prefers-reduced-motion`: gate non-essential motion behind `@media (prefers-reduced-motion: no-preference)`.
+- Node.js + Express
+- TypeScript
+- tRPC（API 层）
+- fluent-ffmpeg + 系统 FFmpeg（视频拼接）
+- fs-extra（文件操作）
+- uuid（唯一 ID 生成）
+- axios（HTTP 请求）
+- 本地 JSON 文件存储（无数据库依赖）
 
 ---
 
-## Pre-built Components
+## 项目结构
 
-Before implementing UI features, check if these components already exist:
-
-Maps:
-- `client/src/components/Map.tsx` - Google Maps integration with proxy authentication. Provides MapView component with onMapReady callback for initializing Google Maps services (Places, Geocoder, Directions, Drawing, etc.). All map functionality works directly in the browser.
-
-When implementing features that match these categories, MUST evaluate the component first to decide whether to use or customize it.
+```
+cisum-ai-video-studio/
+├── client/                    # 前端 React 应用
+│   ├── src/
+│   │   ├── pages/             # 页面组件（14 个页面）
+│   │   ├── components/        # 通用组件
+│   │   ├── types/             # TypeScript 类型定义
+│   │   └── lib/               # tRPC 客户端
+├── server/                    # 后端 Express 服务
+│   ├── types/                 # 后端类型定义
+│   ├── services/              # 业务服务层
+│   │   ├── settingsService.ts # 配置管理
+│   │   ├── projectService.ts  # 项目 CRUD
+│   │   ├── videoGenerationService.ts  # 视频生成调度
+│   │   ├── stitchService.ts   # FFmpeg 拼接
+│   │   ├── mockDataService.ts # Mock 数据
+│   │   └── generativeService.ts  # LLM 策划案/分镜生成
+│   ├── adapters/              # AI Provider 适配器
+│   │   ├── veo3Adapter.ts     # Veo3 Compatible API
+│   │   └── mockVideoAdapter.ts # Mock 视频适配器
+│   ├── storage/               # JSON 文件存储
+│   └── routers.ts             # tRPC 路由定义
+├── data/                      # 本地数据存储（.gitignore）
+│   ├── settings.local.json    # API 配置
+│   ├── projects.json          # 项目数据
+│   └── tasks.json             # 任务数据
+└── public/                    # 静态文件
+    ├── mock/                  # Mock 视频片段
+    ├── generated/             # 下载的视频片段
+    └── stitched/              # 拼接后的最终视频
+```
 
 ---
 
-## 🗺️ Maps Integration
+## 安装方法
 
-**CRITICAL: The Manus proxy provides FULL access to ALL Google Maps features** - including advanced drawing, heatmaps, Street View, all layers, Places API, etc. Do NOT ask users for Google Map API keys - authentication is automatic.
+**系统要求：**
 
-**Implementation:**
-- Frontend: Import MapView from `client/src/components/Map.tsx` and initialize ANY Google Maps service (geocoding, directions, places, drawing, visualization, geometry, etc.) in the onMapReady callback. ALL Google Maps JavaScript API features work directly in the browser.
+- Node.js 18+
+- pnpm（推荐）或 npm
+- FFmpeg（系统级安装）
 
-NEVER use external map libraries or request API keys from users - the Manus proxy handles everything automatically with no feature limitations.
+**安装 FFmpeg（Ubuntu/Debian）：**
+
+```bash
+sudo apt-get install ffmpeg
+```
+
+**安装 FFmpeg（macOS）：**
+
+```bash
+brew install ffmpeg
+```
+
+**安装项目依赖：**
+
+```bash
+pnpm install
+```
 
 ---
 
-## ✅ Launch Checklist
-- [ ] UI layout and navigation structure correct, all image src valid.
-- [ ] Success + error paths verified in the browser
+## 启动方法
+
+```bash
+# 开发模式（同时启动前后端）
+pnpm dev
+
+# 或分别启动
+pnpm dev:backend   # 启动后端（端口 3000）
+pnpm dev:frontend  # 启动前端（端口 5173）
+```
+
+访问 `http://localhost:5173` 即可使用。
 
 ---
 
-## Core File References
+## 首次运行配置说明
 
-`package.json`
-```tsx
-{
-  "name": "cisum-ai-video-studio",
-  "version": "1.0.0",
-  "type": "module",
-  "license": "MIT",
-  "scripts": {
-    "dev": "vite --host",
-    "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
-    "start": "NODE_ENV=production node dist/index.js",
-    "preview": "vite preview --host",
-    "check": "tsc --noEmit",
-    "format": "prettier --write ."
-  },
-  "dependencies": {
-    "@hookform/resolvers": "^5.2.2",
-    "@radix-ui/react-accordion": "^1.2.12",
-    "@radix-ui/react-alert-dialog": "^1.1.15",
-    "@radix-ui/react-aspect-ratio": "^1.1.7",
-    "@radix-ui/react-avatar": "^1.1.10",
-    "@radix-ui/react-checkbox": "^1.3.3",
-    "@radix-ui/react-collapsible": "^1.1.12",
-    "@radix-ui/react-context-menu": "^2.2.16",
-    "@radix-ui/react-dialog": "^1.1.15",
-    "@radix-ui/react-dropdown-menu": "^2.1.16",
-    "@radix-ui/react-hover-card": "^1.1.15",
-    "@radix-ui/react-label": "^2.1.7",
-    "@radix-ui/react-menubar": "^1.1.16",
-    "@radix-ui/react-navigation-menu": "^1.2.14",
-    "@radix-ui/react-popover": "^1.1.15",
-    "@radix-ui/react-progress": "^1.1.7",
-    "@radix-ui/react-radio-group": "^1.3.8",
-    "@radix-ui/react-scroll-area": "^1.2.10",
-    "@radix-ui/react-select": "^2.2.6",
-    "@radix-ui/react-separator": "^1.1.7",
-    "@radix-ui/react-slider": "^1.3.6",
-    "@radix-ui/react-slot": "^1.2.3",
-    "@radix-ui/react-switch": "^1.2.6",
-    "@radix-ui/react-tabs": "^1.1.13",
-    "@radix-ui/react-toggle": "^1.1.10",
-    "@radix-ui/react-toggle-group": "^1.1.11",
-    "@radix-ui/react-tooltip": "^1.2.8",
-    "axios": "^1.12.0",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
-    "cmdk": "^1.1.1",
-    "embla-carousel-react": "^8.6.0",
-    "express": "^4.21.2",
-    "framer-motion": "^12.23.22",
-    "input-otp": "^1.4.2",
-    "lucide-react": "^0.453.0",
-    "nanoid": "^5.1.5",
-    "next-themes": "^0.4.6",
-    "react": "^19.2.1",
-    "react-day-picker": "^9.11.1",
-    "react-dom": "^19.2.1",
-    "react-hook-form": "^7.64.0",
-    "react-resizable-panels": "^3.0.6",
-    "recharts": "^2.15.2",
-    "sonner": "^2.0.7",
-    "streamdown": "^1.4.0",
-    "tailwind-merge": "^3.3.1",
-    "tailwindcss-animate": "^1.0.7",
-    "vaul": "^1.1.2",
-    "wouter": "^3.3.5",
-    "zod": "^4.1.12"
-  },
-  "devDependencies": {
-    "@builder.io/vite-plugin-jsx-loc": "^0.1.1",
-    "@tailwindcss/typography": "^0.5.15",
-    "@tailwindcss/vite": "^4.1.3",
-    "@types/express": "4.17.21",
-    "@types/google.maps": "^3.58.1",
-    "@types/node": "^24.7.0",
-    "@types/react": "^19.2.1",
-    "@types/react-dom": "^19.2.1",
-    "@vitejs/plugin-react": "^5.0.4",
-    "add": "^2.0.6",
-    "autoprefixer": "^10.4.20",
-    "esbuild": "^0.25.0",
-    "pnpm": "^10.15.1",
-    "postcss": "^8.4.47",
-    "prettier": "^3.6.2",
-    "tailwindcss": "^4.1.14",
-    "tsx": "^4.19.1",
-    "tw-animate-css": "^1.4.0",
-    "typescript": "5.6.3",
-    "vite": "^7.1.7",
-    "vite-plugin-manus-runtime": "^0.0.57",
-    "vitest": "^2.1.4"
-  },
-  "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
-  "pnpm": {
-    "patchedDependencies": {
-      "wouter@3.7.1": "patches/wouter@3.7.1.patch"
-    },
-    "overrides": {
-      "tailwindcss>nanoid": "3.3.7"
-    }
-  }
-}
-```
+首次访问时，如果未配置 API，系统会自动跳转到 `/setup` 配置页面。
 
-`client/src/App.tsx`
-```tsx
-import { Toaster } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
-import Home from "./pages/Home";
+**配置字段说明：**
 
+| 字段 | 说明 |
+|------|------|
+| API Base URL | AI 视频 API 的基础地址，例如 `https://api.example.com` |
+| API Token | Bearer Token，仅在后端保存，前端只展示脱敏版本 |
+| API Provider | `Veo3 Compatible API` 或 `Mock Mode` |
+| 默认模型 | `veo3`（高质量）、`veo3_fast`（快速）、`mock`（演示） |
 
-function Router() {
-  return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
+**推荐首次使用 Mock Mode**，无需真实 API 即可完整演示所有功能。
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
-function App() {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
-
-export default App;
-```
-
-`client/src/pages/Home.tsx`
-```tsx
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
-
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
- */
-export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
-    </div>
-  );
-}
-```
-
-`client/src/index.css`
-```tsx
-@import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-
-:root {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-600);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.235 0.015 65);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.015 65);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.141 0.005 285.823);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.623 0.214 259.815);
-}
-
-.dark {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-500);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.85 0.005 65);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.85 0.005 65);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.85 0.005 65);
-  --secondary: oklch(0.24 0.006 286.033);
-  --secondary-foreground: oklch(0.7 0.005 65);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground:  oklch(0.92 0.005 65);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.488 0.243 264.376);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.85 0.005 65);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground:  oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.488 0.243 264.376);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  button:not(:disabled),
-  [role="button"]:not([aria-disabled="true"]),
-  [type="button"]:not(:disabled),
-  [type="submit"]:not(:disabled),
-  [type="reset"]:not(:disabled),
-  a[href],
-  select:not(:disabled),
-  input[type="checkbox"]:not(:disabled),
-  input[type="radio"]:not(:disabled) {
-    @apply cursor-pointer;
-  }
-}
-
-@layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
-  .container {
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
-    padding-right: 1rem;
-  }
-
-  .flex {
-    min-height: 0;
-    min-width: 0;
-  }
-
-  @media (min-width: 640px) {
-    .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
-      padding-right: 1.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .container {
-      padding-left: 2rem; /* 32px - desktop padding */
-      padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
-    }
-  }
-}
-```
-
-`client/index.html`
-```tsx
-<!doctype html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>{{project_title}}</title>    
-    <!-- THIS IS THE START OF A COMMENT BLOCK, BLOCK TO BE DELETED: Google Fonts here, example:
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    THIS IS THE END OF A COMMENT BLOCK, BLOCK TO BE DELETED -->
-  </head>
-
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
-  </body>
-
-</html>
-```
-
-`server/index.ts`
-```tsx
-import express from "express";
-import { createServer } from "http";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-async function startServer() {
-  const app = express();
-  const server = createServer(app);
-
-  // Serve static files from dist/public in production
-  const staticPath =
-    process.env.NODE_ENV === "production"
-      ? path.resolve(__dirname, "public")
-      : path.resolve(__dirname, "..", "dist", "public");
-
-  app.use(express.static(staticPath));
-
-  // Handle client-side routing - serve index.html for all routes
-  app.get("*", (_req, res) => {
-    res.sendFile(path.join(staticPath, "index.html"));
-  });
-
-  const port = process.env.PORT || 3000;
-
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);
-  });
-}
-
-startServer().catch(console.error);
-```
 ---
 
-## Common Pitfalls
+## 为什么 API Token 不能写入前端
 
-### Infinite loading loops from unstable references
-**Anti-pattern:** Creating new objects/arrays in render that are used as query inputs
-```tsx
-// ❌ Bad: New Date() creates new reference every render → infinite queries
-const { data } = trpc.items.getByDate.useQuery({
-  date: new Date(), // ← New object every render!
-});
+API Token 是访问 AI 视频生成服务的密钥，如果暴露在前端代码中：
 
-// ❌ Bad: Array/object literals in query input
-const { data } = trpc.items.getByIds.useQuery({
-  ids: [1, 2, 3], // ← New array reference every render!
-});
-```
+1. 任何人打开浏览器开发者工具即可看到 Token
+2. Token 会被记录在浏览器历史、日志和网络请求中
+3. 恶意用户可以利用 Token 消耗你的 API 配额
 
-**Correct approach:** Stabilize references with useState/useMemo
-```tsx
-// ✅ Good: Initialize once with useState
-const [date] = useState(() => new Date());
-const { data } = trpc.items.getByDate.useQuery({ date });
+本系统的安全设计：
 
-// ✅ Good: Memoize complex inputs
-const ids = useMemo(() => [1, 2, 3], []);
-const { data } = trpc.items.getByIds.useQuery({ ids });
-```
+- Token 仅保存在 `data/settings.local.json`（已加入 `.gitignore`）
+- 前端只展示脱敏版本（如 `sk-abc***xYz9`）
+- 所有 AI API 请求通过后端代理发出，前端不直接访问第三方 API
+- 日志中不打印完整 Token
 
-**Why this happens:** TRPC queries trigger when input references change. Objects/arrays created in render have new references each time, causing infinite re-fetches.
+---
 
-### Navigation dead-ends in subpages
-**Problem:** Creating nested routes without escape routes—no header nav, no sidebar, no back button.
+## Real API 和 Mock Mode 区别
 
-**Root cause:** Implementing individual pages before establishing global layout structure.
+| 特性 | Real API | Mock Mode |
+|------|---------|-----------|
+| 需要 API 配置 | 是 | 否 |
+| 视频生成 | 调用真实 AI API | 本地模拟，5-8秒后完成 |
+| 视频内容 | AI 生成的真实视频 | 纯色测试视频片段 |
+| FFmpeg 拼接 | 支持 | 支持（使用 Mock 视频） |
+| 适用场景 | 生产环境 | 演示、开发、测试 |
 
-**Solution:** Define layout wrapper in App.tsx first, then build pages inside it. For admin tools use DashboardLayout; for detail pages add back button with `router.back()`.
+---
 
-### Invisible text from theme/color mismatches
+## 分段生成逻辑说明
 
-**Root cause:** Semantic colors (`bg-background`, `text-foreground`) are CSS variables that resolve based on ThemeProvider's active theme. Mismatches cause invisible text.
+系统根据视频时长自动拆分镜头数量：
 
-**Two critical rules:**
+| 视频时长 | 镜头数量 | 每镜头时长 |
+|---------|---------|-----------|
+| 30 秒 | 4-6 个 | 约 5-8 秒 |
+| 60 秒 | 8-10 个 | 约 6-8 秒 |
+| 90 秒 | 12-15 个 | 约 6-8 秒 |
+| 120 秒 | 16-20 个 | 约 6-8 秒 |
 
-1. **Match theme to CSS variables:** If `defaultTheme="dark"` in App.tsx, ensure `.dark {}` in index.css has dark background + light foreground values
-2. **Always pair bg with text:** When using `bg-{semantic}`, MUST also use `text-{semantic}-foreground` (not automatic - text inherits from parent otherwise)
+每个镜头独立提交 AI 生成任务，前端定时轮询状态。所有镜头完成后才能进入拼接步骤。
 
-**Quick reference:**
-```tsx
-// ✅ Theme + CSS alignment
-<ThemeProvider defaultTheme="dark">  {/* Must match .dark in index.css */}
-  <div className="bg-background text-foreground">...</div>
-</ThemeProvider>
+---
 
-// ✅ Required class pairs
-<div className="bg-popover text-popover-foreground">...</div>
-<div className="bg-card text-card-foreground">...</div>
-<div className="bg-accent text-accent-foreground">...</div>
-```
+## FFmpeg 拼接逻辑说明
 
-### Nested anchor tags in Link components
-**Problem:** Wrapping `<a>` tags inside another `<a>` or wouter's `<Link>` creates nested anchors and runtime errors.
+拼接流程：
 
-**Solution:** Pass children directly to Link—it already renders an `<a>` internally.
-```tsx
-// ❌ Bad: <Link><a>...</a></Link> or <a><a>...</a></a>
-// ✅ Good: <Link>...</Link> or just <a>...</a>
-```
-### Empty `Select.Item` values
+1. 后端下载所有已完成的视频片段到 `public/generated/{projectId}/segments/`
+2. 生成 `concat.txt` 文件，列出所有片段路径
+3. 执行 `ffmpeg -f concat -safe 0 -i concat.txt -c copy final.mp4`
+4. 如果 `-c copy` 失败，自动 fallback 到重新编码：`-c:v libx264 -c:a aac -pix_fmt yuv420p`
+5. 输出最终视频到 `public/stitched/{projectId}/final.mp4`
+6. 前端通过 `/static/stitched/{projectId}/final.mp4` 访问
 
-**Rule:** Every `<Select.Item>` must have a non-empty `value` prop—never `""`, `undefined`, or omitted.
+---
 
-**Rule:** Use sonner for toasts; do not add react-toastify or @radix-ui/react-toast
+## 常见问题
 
-**Rule:** If you put placeholder components for App.tsx routes, you MUST replace them with actual components after your implementation.
+**Q: 启动时报 FFmpeg 相关错误？**
+
+A: 确保系统已安装 FFmpeg，运行 `ffmpeg -version` 验证。
+
+**Q: Mock Mode 下视频拼接失败？**
+
+A: Mock 视频在后端启动时自动生成，请等待服务完全启动后再尝试。
+
+**Q: API 连接测试失败？**
+
+A: 检查 API Base URL 格式是否正确（需包含 `https://`），确认 Token 有效。
+
+**Q: 生成的分镜 Prompt 不够准确？**
+
+A: 可在分镜脚本页面手动编辑每个镜头的 Prompt，支持完全自定义。
+
+**Q: 视频拼接后无法播放？**
+
+A: 确认所有片段均已成功下载，检查 `public/generated/` 目录中是否有文件。
+
+---
+
+## 后续扩展建议
+
+1. **真实素材上传**：集成 S3 存储，支持用户上传艺人照片和视频素材
+2. **多 AI Provider 支持**：扩展适配器支持 Runway、Kling、Sora 等
+3. **字幕自动生成**：集成 Whisper API 从视频音频自动生成字幕
+4. **批量导出**：支持一键导出多平台适配版本（不同比例和时长）
+5. **团队协作**：添加用户认证和项目共享功能
+6. **模板市场**：允许用户创建和分享自定义视频模板
+7. **实时预览**：在分镜编辑时实时预览 Prompt 效果
+
+---
+
+*由 CisuMusic AI Video Studio 团队构建*
