@@ -88,6 +88,10 @@ export default function SettingsPage() {
       watermark?: string;
       generateApiPath?: string;
       statusApiPath?: string;
+      llmProvider?: "forge" | "openai" | "google" | "custom";
+      llmBaseUrl?: string;
+      llmToken?: string;
+      llmModel?: string;
     } = {
       apiBaseUrl: form.apiBaseUrl,
       mockMode: form.mockMode,

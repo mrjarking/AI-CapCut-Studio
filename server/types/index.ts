@@ -58,7 +58,7 @@ export interface VideoStatusResponse {
 export interface AppSettings {
   apiBaseUrl: string;
   apiToken: string;
-  apiProvider: "veo3" | "mock";
+  apiProvider: "veo3" | "google_veo" | "mock";
   defaultModel: string; // flexible model name, e.g. "veo3", "veo3_fast", "veo3.1-fast", "mock"
   mockMode: boolean;
   watermark: string;
