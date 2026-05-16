@@ -760,7 +760,7 @@
     ],
     "status": "storyboard",
     "createdAt": 1778892862408,
-    "updatedAt": 1778893031967,
+    "updatedAt": 1778924610435,
     "brief": {
       "title": "2Z - New Song Teaser (30 Sec K-Pop MV Style)",
       "coreSellingPoints": [
@@ -784,6 +784,146 @@
       "musicSuggestion": "A 15-20 second snippet of the most impactful and catchy part of 2Z's new song, preferably the chorus or a strong instrumental hook, followed by a short instrumental outro.",
       "socialMediaTips": "Use trending K-Pop hashtags (#2Z #KPop #NewMusic #TikTokKPop #BoyGroup). Encourage users to use the sound in their own TikToks. Ask questions to drive engagement (e.g., 'What's your favorite part?'). Post during peak TikTok hours.",
       "ctaSuggestion": "Text overlay: '2Z New Song Out Soon!' and 'Pre-save Now! Link in Bio'. End screen with album art and official release date. Encourage users to 'Follow 2Z for more!'."
+    }
+  },
+  {
+    "name": "2Z 参与粉丝见面会",
+    "userRole": "fan_operator",
+    "artistId": "2z",
+    "artistName": "2Z",
+    "goal": "fan_interaction",
+    "durationSeconds": 30,
+    "aspectRatio": "9:16",
+    "targetPlatforms": [
+      "tiktok"
+    ],
+    "targetLanguage": "zh",
+    "style": "fan_support",
+    "selectedKnowledgeModules": [
+      "2z_basic",
+      "2z_fan"
+    ],
+    "selectedAssets": [
+      "a004",
+      "a006",
+      "a002"
+    ],
+    "id": "3de6f5b5-9301-41fd-b219-f306833eff28",
+    "scenes": [
+      {
+        "id": "8c0708df-9d52-40f0-88ee-410204b86cde",
+        "order": 1,
+        "startTime": 0,
+        "endTime": 7,
+        "goal": "开场吸引",
+        "visualDescription": "镜头 1：艺人在霓虹灯舞台上登场，光效炫目",
+        "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, walking through a futuristic digital stage, slow push-in from wide shot to medium shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "艺人魅力展示",
+        "voiceoverText": "2Z - 30秒宣发视频 - 开场吸引",
+        "musicSuggestion": "使用艺人代表作作为背景音乐",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "completed",
+        "retryCount": 0,
+        "taskId": "models/veo-3.1-fast-generate-preview/operations/msbekznhucea",
+        "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/lphqpiv5yoaw:download?alt=media"
+      },
+      {
+        "id": "178c1329-8145-47fb-a3a3-649547c075c4",
+        "order": 2,
+        "startTime": 7,
+        "endTime": 14,
+        "goal": "艺人魅力展示",
+        "visualDescription": "镜头 2：艺人特写镜头，展现个人魅力",
+        "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, performing with intense emotion, looking directly at camera, dramatic close-up, slow motion, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "音乐作品推广",
+        "voiceoverText": "2Z - 30秒宣发视频 - 艺人魅力展示",
+        "musicSuggestion": "使用艺人代表作作为背景音乐",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "completed",
+        "retryCount": 0,
+        "taskId": "models/veo-3.1-fast-generate-preview/operations/s1zhki0quqm1",
+        "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/mxbvswzmw5kb:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
+      },
+      {
+        "id": "9a63bb17-fdd7-41aa-8208-33c69e7ea189",
+        "order": 3,
+        "startTime": 14,
+        "endTime": 21,
+        "goal": "音乐氛围渲染",
+        "visualDescription": "镜头 3：音乐可视化效果，音浪与光效融合",
+        "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, surrounded by music visualization particles and light trails, 360-degree orbit shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "粉丝互动增强",
+        "voiceoverText": "2Z - 30秒宣发视频 - 音乐氛围渲染",
+        "musicSuggestion": "使用艺人代表作作为背景音乐",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "c382f4a8-b338-40ad-82d2-e0dc91147a96",
+        "order": 4,
+        "startTime": 21,
+        "endTime": 28,
+        "goal": "故事情节推进",
+        "visualDescription": "镜头 4：场景切换，展现艺人故事",
+        "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, moving through different environments, tracking shot following the artist, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "艺人魅力展示",
+        "voiceoverText": "2Z - 30秒宣发视频 - 故事情节推进",
+        "musicSuggestion": "使用艺人代表作作为背景音乐",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "872e5998-675e-4d10-bdfa-9fbc1aaa6285",
+        "order": 5,
+        "startTime": 28,
+        "endTime": 35,
+        "goal": "情感高潮",
+        "visualDescription": "镜头 5：情感爆发时刻，视觉冲击最强",
+        "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, delivering the emotional peak of the performance, extreme close-up to wide shot reveal, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "音乐作品推广",
+        "voiceoverText": "2Z - 30秒宣发视频 - 情感高潮",
+        "musicSuggestion": "使用艺人代表作作为背景音乐",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      }
+    ],
+    "status": "storyboard",
+    "createdAt": 1778924683868,
+    "updatedAt": 1778926067384,
+    "brief": {
+      "title": "2Z - 30秒宣发视频",
+      "coreSellingPoints": [
+        "艺人魅力展示",
+        "音乐作品推广",
+        "粉丝互动增强"
+      ],
+      "targetAudience": "18-35岁音乐爱好者，关注 K-pop 和亚洲流行音乐的年轻用户",
+      "emotionKeywords": [
+        "激情",
+        "期待",
+        "共鸣",
+        "震撼"
+      ],
+      "storyline": "从艺人登场到高潮展示，通过视觉冲击和情感共鸣吸引观众",
+      "videoStructure": "开场吸引 → 内容展示 → 情感高潮 → CTA 引导",
+      "subtitleStyle": "霓虹渐变字幕，中英双语",
+      "voiceoverStyle": "充满活力的年轻声音，节奏感强",
+      "musicSuggestion": "使用艺人代表作作为背景音乐",
+      "socialMediaTips": "发布时间选择晚上8-10点，配合话题标签 #CisuMusic",
+      "ctaSuggestion": "关注艺人 | 点击链接了解更多"
     }
   }
 ]

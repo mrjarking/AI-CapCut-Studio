@@ -18,6 +18,10 @@ const DEFAULT_SETTINGS: AppSettings = {
   isConfigured: false,
   generateApiPath: "",
   statusApiPath: "",
+  llmProvider: "forge",
+  llmBaseUrl: "",
+  llmToken: "",
+  llmModel: "gemini-1.5-flash", // default model if using google
 };
 
 export async function getSettings(): Promise<AppSettings> {

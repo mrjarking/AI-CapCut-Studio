@@ -1,5 +1,5 @@
 // Re-export shared types for frontend use
-export type AIProvider = "veo3" | "veo3_fast" | "mock";
+export type AIProvider = "veo3" | "veo3_fast" | "google_veo" | "mock";
 
 export type VideoTaskStatus =
   | "queued"
@@ -111,7 +111,7 @@ export interface Project {
 export interface AppSettings {
   apiBaseUrl: string;
   maskedToken: string;
-  apiProvider: "veo3" | "mock";
+  apiProvider: "veo3" | "google_veo" | "mock";
   defaultModel: string;
   mockMode: boolean;
   watermark: string;

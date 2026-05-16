@@ -43,7 +43,7 @@ const settingsRouter = router({
       z.object({
         apiBaseUrl: z.string().optional(),
         apiToken: z.string().optional(),
-        apiProvider: z.enum(["veo3", "mock"]).optional(),
+        apiProvider: z.enum(["veo3", "google_veo", "mock"]).optional(),
         defaultModel: z.string().optional(),
         mockMode: z.boolean().optional(),
         watermark: z.string().optional(),
@@ -54,6 +54,10 @@ const settingsRouter = router({
         maxSceneDurationSeconds: z.number().optional(),
         generateApiPath: z.string().optional(),
         statusApiPath: z.string().optional(),
+        llmProvider: z.enum(["forge", "openai", "google", "custom"]).optional(),
+        llmBaseUrl: z.string().optional(),
+        llmToken: z.string().optional(),
+        llmModel: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
@@ -191,7 +195,7 @@ const videoRouter = router({
   generate: publicProcedure
     .input(
       z.object({
-        provider: z.enum(["veo3", "veo3_fast", "mock"]),
+        provider: z.enum(["veo3", "veo3_fast", "google_veo", "mock"]),
         projectId: z.string(),
         sceneId: z.string(),
         prompt: z.string(),

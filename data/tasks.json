@@ -280,8 +280,30 @@
     "provider": "veo3",
     "status": "processing",
     "createdAt": 1778892927230,
-    "updatedAt": 1778893031965,
+    "updatedAt": 1778924610433,
     "retryCount": 0,
     "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "models/veo-3.1-fast-generate-preview/operations/msbekznhucea",
+    "projectId": "3de6f5b5-9301-41fd-b219-f306833eff28",
+    "sceneId": "8c0708df-9d52-40f0-88ee-410204b86cde",
+    "provider": "google_veo",
+    "status": "completed",
+    "createdAt": 1778925310832,
+    "updatedAt": 1778925378259,
+    "retryCount": 0,
+    "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/lphqpiv5yoaw:download?alt=media"
+  },
+  {
+    "taskId": "models/veo-3.1-fast-generate-preview/operations/s1zhki0quqm1",
+    "projectId": "3de6f5b5-9301-41fd-b219-f306833eff28",
+    "sceneId": "178c1329-8145-47fb-a3a3-649547c075c4",
+    "provider": "google_veo",
+    "status": "completed",
+    "createdAt": 1778925994839,
+    "updatedAt": 1778926067382,
+    "retryCount": 0,
+    "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/mxbvswzmw5kb:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
   }
 ]

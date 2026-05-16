@@ -18,11 +18,16 @@ export default function SettingsPage() {
     apiBaseUrl: "",
     apiToken: "",
     mockMode: true,
-    apiProvider: "mock" as "veo3" | "mock",
+    apiProvider: "mock" as "veo3" | "google_veo" | "mock",
     defaultModel: "mock",
     watermark: "CisuMusic",
     generateApiPath: "",
     statusApiPath: "",
+    // LLM
+    llmProvider: "forge" as "forge" | "openai" | "google" | "custom",
+    llmBaseUrl: "",
+    llmToken: "",
+    llmModel: "gemini-1.5-flash",
   });
 
   useEffect(() => {
@@ -36,6 +41,10 @@ export default function SettingsPage() {
         watermark: settings.watermark,
         generateApiPath: settings.generateApiPath ?? "",
         statusApiPath: settings.statusApiPath ?? "",
+        llmProvider: (settings as any).llmProvider ?? "forge",
+        llmBaseUrl: (settings as any).llmBaseUrl ?? "",
+        llmToken: "",
+        llmModel: (settings as any).llmModel ?? "gemini-1.5-flash",
       });
     }
   }, [settings]);
@@ -73,7 +82,7 @@ export default function SettingsPage() {
     const payload: {
       apiBaseUrl?: string;
       apiToken?: string;
-      apiProvider?: "veo3" | "mock";
+      apiProvider?: "veo3" | "google_veo" | "mock";
       defaultModel?: string;
       mockMode?: boolean;
       watermark?: string;
@@ -87,8 +96,12 @@ export default function SettingsPage() {
       watermark: form.watermark,
       generateApiPath: form.generateApiPath,
       statusApiPath: form.statusApiPath,
-    };
+      llmProvider: form.llmProvider,
+      llmBaseUrl: form.llmBaseUrl,
+      llmModel: form.llmModel,
+    } as any;
     if (form.apiToken) payload.apiToken = form.apiToken;
+    if (form.llmToken) payload.llmToken = form.llmToken;
     saveMutation.mutate(payload);
   };
 
@@ -131,13 +144,24 @@ export default function SettingsPage() {
             <button
               onClick={() => setForm((f) => ({ ...f, mockMode: false, apiProvider: "veo3" }))}
               className={`flex-1 flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all ${
-                !form.mockMode
+                !form.mockMode && form.apiProvider === "veo3"
                   ? "border-[oklch(0.7_0.22_200/0.6)] bg-[oklch(0.7_0.22_200/0.1)] text-[oklch(0.7_0.22_200)]"
                   : "border-border text-muted-foreground"
               }`}
             >
               <Wifi size={16} />
-              <span className="text-xs font-medium">Real API</span>
+              <span className="text-xs font-medium">OpenAI API</span>
+            </button>
+            <button
+              onClick={() => setForm((f) => ({ ...f, mockMode: false, apiProvider: "google_veo", defaultModel: "veo-3.1-fast-generate-preview" }))}
+              className={`flex-1 flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all ${
+                !form.mockMode && form.apiProvider === "google_veo"
+                  ? "border-[oklch(0.78_0.18_85/0.6)] bg-[oklch(0.78_0.18_85/0.1)] text-[oklch(0.78_0.18_85)]"
+                  : "border-border text-muted-foreground"
+              }`}
+            >
+              <Zap size={16} />
+              <span className="text-xs font-medium">Google Veo</span>
             </button>
           </div>
         </div>
@@ -150,11 +174,17 @@ export default function SettingsPage() {
             <div className="space-y-1.5">
               <label className="text-xs text-muted-foreground">API Base URL</label>
               <Input
-                placeholder="https://api.example.com"
+                placeholder={form.apiProvider === "google_veo" ? "https://generativelanguage.googleapis.com (Auto)" : "https://api.example.com"}
                 value={form.apiBaseUrl}
+                disabled={form.apiProvider === "google_veo"}
                 onChange={(e) => setForm((f) => ({ ...f, apiBaseUrl: e.target.value }))}
                 className="text-sm"
               />
+              {form.apiProvider === "google_veo" && (
+                <p className="text-[10px] text-[oklch(0.78_0.18_85)]">
+                  Google Veo 模式下自动使用官方端点，无需填写 Base URL
+                </p>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -232,6 +262,76 @@ export default function SettingsPage() {
             )}
           </div>
         )}
+
+        {/* LLM Config */}
+        <div className="space-y-3">
+          <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">文字生成 (LLM) 配置</h3>
+          
+          <div className="flex gap-2 mb-3">
+            {[
+              { id: "forge", label: "系统默认", icon: Shield },
+              { id: "google", label: "Google", icon: Zap },
+              { id: "openai", label: "OpenAI", icon: Wifi },
+            ].map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setForm(f => ({ ...f, llmProvider: p.id as any }))}
+                className={`flex-1 py-2 px-1 rounded-lg border text-[10px] font-medium transition-all flex items-center justify-center gap-1 ${
+                  form.llmProvider === p.id 
+                    ? "border-[oklch(0.6_0.28_290/0.6)] bg-[oklch(0.6_0.28_290/0.1)] text-[oklch(0.6_0.28_290)]" 
+                    : "border-border text-muted-foreground"
+                }`}
+              >
+                <p.icon size={10} />
+                {p.label}
+              </button>
+            ))}
+          </div>
+
+          {form.llmProvider !== "forge" && (
+            <div className="space-y-3 p-3 rounded-xl bg-[oklch(0.6_0.28_290/0.03)] border border-[oklch(0.6_0.28_290/0.1)]">
+              {form.llmProvider !== "google" && (
+                <div className="space-y-1">
+                  <label className="text-[10px] text-muted-foreground">API Base URL</label>
+                  <Input
+                    placeholder="https://api.openai.com"
+                    value={form.llmBaseUrl}
+                    onChange={(e) => setForm(f => ({ ...f, llmBaseUrl: e.target.value }))}
+                    className="text-xs h-8"
+                  />
+                </div>
+              )}
+              
+              <div className="space-y-1">
+                <label className="text-[10px] text-muted-foreground">API Token {form.llmProvider === "google" && "(Gemini Key)"}</label>
+                <Input
+                  type="password"
+                  placeholder="留空则不修改"
+                  value={form.llmToken}
+                  onChange={(e) => setForm(f => ({ ...f, llmToken: e.target.value }))}
+                  className="text-xs h-8"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] text-muted-foreground">模型名称</label>
+                <Input
+                  placeholder="gemini-1.5-flash"
+                  value={form.llmModel}
+                  onChange={(e) => setForm(f => ({ ...f, llmModel: e.target.value }))}
+                  className="text-xs h-8"
+                />
+              </div>
+            </div>
+          )}
+
+          {form.llmProvider === "forge" && (
+            <p className="text-[10px] text-muted-foreground italic px-1">
+              使用系统内置的 Forge 引擎生成文案（需配置 BUILT_IN_FORGE_API_KEY）
+            </p>
+          )}
+        </div>
 
         {/* Watermark */}
         <div className="space-y-2">

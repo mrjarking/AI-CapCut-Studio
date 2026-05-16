@@ -2,6 +2,7 @@ import { readJson, writeJson } from "../storage/jsonStorage.js";
 import { getSettings } from "./settingsService.js";
 import { mockGenerate, mockGetStatus } from "../adapters/mockVideoAdapter.js";
 import { veo3Generate, veo3GetStatus } from "../adapters/veo3Adapter.js";
+import { googleVeoGenerate, googleVeoGetStatus } from "../adapters/googleVideoAdapter.js";
 import { updateScene } from "./projectService.js";
 import type {
   GenerateVideoRequest,
@@ -33,6 +34,8 @@ export async function generateVideo(req: GenerateVideoRequest): Promise<Generate
 
   if (settings.mockMode || req.provider === "mock") {
     result = await mockGenerate(req);
+  } else if (req.provider === "google_veo") {
+    result = await googleVeoGenerate(req);
   } else {
     result = await veo3Generate(req);
   }
@@ -72,6 +75,9 @@ export async function getVideoStatus(taskId: string): Promise<VideoStatusRespons
 
   if (settings.mockMode || taskId.startsWith("mock_")) {
     result = await mockGetStatus(taskId);
+  } else if (task?.provider === "google_veo" || taskId.includes("operations/")) {
+    // Google operation IDs are usually formatted like 'models/.../operations/...'
+    result = await googleVeoGetStatus(taskId);
   } else {
     result = await veo3GetStatus(taskId);
   }

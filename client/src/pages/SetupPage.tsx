@@ -14,7 +14,7 @@ export default function SetupPage() {
   const [form, setForm] = useState({
     apiBaseUrl: "",
     apiToken: "",
-    apiProvider: "mock" as "veo3" | "mock",
+    apiProvider: "mock" as "veo3" | "google_veo" | "mock",
     defaultModel: "mock",
     mockMode: true,
     generateApiPath: "",
@@ -46,7 +46,7 @@ export default function SetupPage() {
     saveMutation.mutate({
       apiBaseUrl: form.apiBaseUrl,
       apiToken: form.apiToken,
-      apiProvider: form.apiProvider,
+      apiProvider: form.apiProvider as "veo3" | "google_veo" | "mock",
       defaultModel: form.defaultModel,
       mockMode: form.mockMode,
       generateApiPath: form.generateApiPath,

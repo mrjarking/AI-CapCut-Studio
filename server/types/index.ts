@@ -1,6 +1,6 @@
 // ─── AI Provider Types ───────────────────────────────────────────────────────
 
-export type AIProvider = "veo3" | "veo3_fast" | "mock";
+export type AIProvider = "veo3" | "veo3_fast" | "google_veo" | "mock";
 
 export type VideoTaskStatus =
   | "queued"
@@ -71,6 +71,12 @@ export interface AppSettings {
   // Custom API paths (leave empty to use defaults)
   generateApiPath: string; // e.g. "/v1/video/generations" or "/api/v1/veo/generate"
   statusApiPath: string;   // e.g. "/v1/video/generations/{taskId}" or "/api/v1/veo/record-info"
+  
+  // LLM (Text Generation) Settings
+  llmProvider: "forge" | "openai" | "google" | "custom";
+  llmBaseUrl: string;
+  llmToken: string;
+  llmModel: string;
 }
 
 // ─── Project & Scene ─────────────────────────────────────────────────────────

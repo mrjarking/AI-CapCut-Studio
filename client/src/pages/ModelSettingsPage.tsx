@@ -48,10 +48,23 @@ export default function ModelSettingsPage() {
     onError: (err) => toast.error(`保存失败: ${err.message}`),
   });
 
+  const handleSave = () => {
+    const updates: any = { ...form };
+    
+    // Auto-switch provider if user picks a Google-native model
+    if (form.defaultModel.startsWith("veo-")) {
+      updates.apiProvider = "google_veo";
+    } else if (form.defaultModel === "mock") {
+      updates.apiProvider = "mock";
+    }
+
+    saveMutation.mutate(updates);
+  };
+
   const PRESET_MODELS = [
-    { name: "veo3.1-fast", desc: "推荐 · 快速模式，约 $0.2-0.4 / 镜头" },
+    { name: "veo-3.1-fast-generate-preview", desc: "Google 原生 · 极速预览，适合快速迭代" },
+    { name: "veo3.1-fast", desc: "推荐 · 兼容模式，约 $0.2-0.4 / 镜头" },
     { name: "veo3.1", desc: "高质量模式，约 $0.5-1.0 / 镜头" },
-    { name: "veo3.1-pro", desc: "专业级模式" },
     { name: "mock", desc: "免费（Mock 演示模式）" },
   ];
   // Note: veo3_fast is deprecated, use veo3.1-fast instead
@@ -198,7 +211,7 @@ export default function ModelSettingsPage() {
 
         <div className="pb-4">
           <Button
-            onClick={() => saveMutation.mutate(form)}
+            onClick={handleSave}
             disabled={saveMutation.isPending}
             className="w-full btn-gradient text-white h-12 text-sm font-semibold"
           >
