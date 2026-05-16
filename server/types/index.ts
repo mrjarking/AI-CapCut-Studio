@@ -191,7 +191,6 @@ export interface VideoTask {
   createdAt: number;
   updatedAt: number;
   retryCount: number;
-  model?: string; // model name used for generation (needed for new-api status routing)
 }
 
 // ─── Stitch ──────────────────────────────────────────────────────────────────

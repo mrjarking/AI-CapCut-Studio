@@ -43,7 +43,7 @@ const settingsRouter = router({
       z.object({
         apiBaseUrl: z.string().optional(),
         apiToken: z.string().optional(),
-        apiProvider: z.enum(["veo3", "mock"]).optional(),
+        apiProvider: z.enum(["veo3", "google_veo", "mock"]).optional(),
         defaultModel: z.string().optional(),
         mockMode: z.boolean().optional(),
         watermark: z.string().optional(),

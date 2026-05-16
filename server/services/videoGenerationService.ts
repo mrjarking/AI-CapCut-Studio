@@ -52,7 +52,6 @@ export async function generateVideo(req: GenerateVideoRequest): Promise<Generate
       createdAt: Date.now(),
       updatedAt: Date.now(),
       retryCount: 0,
-      model: req.model, // save model for status routing (new-api requires model param)
     };
     await saveTask(task);
 
@@ -80,9 +79,7 @@ export async function getVideoStatus(taskId: string): Promise<VideoStatusRespons
     // Google operation IDs are usually formatted like 'models/.../operations/...'
     result = await googleVeoGetStatus(taskId);
   } else {
-    // Pass model from task record for new-api routing (needs model to find the right channel)
-    const taskModel = task?.model || settings.defaultModel;
-    result = await veo3GetStatus(taskId, taskModel);
+    result = await veo3GetStatus(taskId);
   }
 
   // Update task record
