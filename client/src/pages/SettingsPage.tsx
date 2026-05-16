@@ -82,7 +82,7 @@ export default function SettingsPage() {
     const payload: {
       apiBaseUrl?: string;
       apiToken?: string;
-      apiProvider?: "veo3" | "google_veo" | "mock";
+      apiProvider?: "veo3" | "mock";
       defaultModel?: string;
       mockMode?: boolean;
       watermark?: string;
@@ -91,17 +91,13 @@ export default function SettingsPage() {
     } = {
       apiBaseUrl: form.apiBaseUrl,
       mockMode: form.mockMode,
-      apiProvider: form.apiProvider,
+      apiProvider: form.apiProvider as "veo3" | "mock",
       defaultModel: form.defaultModel,
       watermark: form.watermark,
       generateApiPath: form.generateApiPath,
       statusApiPath: form.statusApiPath,
-      llmProvider: form.llmProvider,
-      llmBaseUrl: form.llmBaseUrl,
-      llmModel: form.llmModel,
-    } as any;
+    };
     if (form.apiToken) payload.apiToken = form.apiToken;
-    if (form.llmToken) payload.llmToken = form.llmToken;
     saveMutation.mutate(payload);
   };
 

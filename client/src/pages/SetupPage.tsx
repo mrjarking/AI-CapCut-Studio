@@ -46,7 +46,7 @@ export default function SetupPage() {
     saveMutation.mutate({
       apiBaseUrl: form.apiBaseUrl,
       apiToken: form.apiToken,
-      apiProvider: form.apiProvider as "veo3" | "google_veo" | "mock",
+      apiProvider: form.apiProvider as "veo3" | "mock",
       defaultModel: form.defaultModel,
       mockMode: form.mockMode,
       generateApiPath: form.generateApiPath,
