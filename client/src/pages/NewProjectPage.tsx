@@ -30,7 +30,7 @@ const RATIOS: AspectRatio[] = ["9:16", "16:9", "1:1"];
 
 export default function NewProjectPage() {
   const [, navigate] = useLocation();
-  const { data: artists, isLoading: artistsLoading } = trpc.media.artists.useQuery();
+  const { data: artists, isLoading: artistsLoading, isError: artistsError, refetch: refetchArtists } = trpc.media.artists.useQuery();
 
   const [form, setForm] = useState({
     name: "",
@@ -110,6 +110,16 @@ export default function NewProjectPage() {
                   <div className="h-3 bg-white/5 rounded w-1/2" />
                 </div>
               ))
+            ) : artistsError ? (
+              <div className="col-span-2 text-center py-6 space-y-2">
+                <p className="text-sm text-[oklch(0.65_0.25_25)]">艺人数据加载失败</p>
+                <button
+                  onClick={() => refetchArtists()}
+                  className="text-xs text-[oklch(0.6_0.28_290)] underline"
+                >
+                  点击重试
+                </button>
+              </div>
             ) : artists && artists.length > 0 ? (
               artists.map((a) => (
                 <button
@@ -126,8 +136,14 @@ export default function NewProjectPage() {
                 </button>
               ))
             ) : (
-              <div className="col-span-2 text-center py-6 text-sm text-muted-foreground">
-                暂无艺人数据，请检查后端服务
+              <div className="col-span-2 text-center py-6 space-y-2">
+                <p className="text-sm text-muted-foreground">暂无艺人数据</p>
+                <button
+                  onClick={() => refetchArtists()}
+                  className="text-xs text-[oklch(0.6_0.28_290)] underline"
+                >
+                  点击刷新
+                </button>
               </div>
             )}
           </div>

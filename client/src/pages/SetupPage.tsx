@@ -42,7 +42,16 @@ export default function SetupPage() {
       toast.error("Real API 模式下必须填写 API Base URL");
       return;
     }
-    saveMutation.mutate(form);
+    // Use typed object to avoid tRPC type mismatch
+    saveMutation.mutate({
+      apiBaseUrl: form.apiBaseUrl,
+      apiToken: form.apiToken,
+      apiProvider: form.apiProvider,
+      defaultModel: form.defaultModel,
+      mockMode: form.mockMode,
+      generateApiPath: form.generateApiPath,
+      statusApiPath: form.statusApiPath,
+    });
   };
 
   const handleMockMode = () => {

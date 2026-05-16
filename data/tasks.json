@@ -272,5 +272,16 @@
     "updatedAt": 1778869560010,
     "retryCount": 0,
     "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "e999e7d3bae0830a423c1b1eb30bcd27",
+    "projectId": "4663dede-da9b-4ab7-af73-5d0178592e98",
+    "sceneId": "e5db653e-0f89-421c-ba37-9097904f182a",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778892927230,
+    "updatedAt": 1778893031965,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
   }
 ]

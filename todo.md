@@ -97,3 +97,8 @@
 ## Bug 修复：艺人选择页面无选择项（新需求）
 - [x] 排查 KnowledgePage 艺人数据加载问题
 - [x] 修复艺人列表：添加加载骨架屏和空状态提示，确保数据加载前不显示空白
+
+## Bug 修复：艺人加载失败 + 设置保存报错（新需求）
+- [x] 排查艺人清单加载失败的根本原因：DashboardPage 未预加载 artists，导致进入 NewProjectPage 时需重新请求
+- [x] 排查设置保存 "don't match" 错误：使用 Record<string, unknown> 类型导致 tRPC 类型不匹配
+- [x] 修复：DashboardPage 预加载 artists；修复 SettingsPage/SetupPage 使用精确类型调用 saveMutation

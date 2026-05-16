@@ -645,5 +645,145 @@
       "socialMediaTips": "发布时添加#2Z新歌 #KPop #新歌速递 #舞蹈挑战 等热门话题。鼓励用户使用该音乐进行舞蹈挑战或对嘴视频。与K-Pop相关博主或抖音达人进行合作推广。发布幕后花絮或成员互动彩蛋。",
       "ctaSuggestion": "“点击链接预购/收听完整版！” “关注2Z，解锁更多精彩！” “用这首歌拍你的舞蹈挑战！”"
     }
+  },
+  {
+    "name": "2Z CrossRoads",
+    "userRole": "operator",
+    "artistId": "2z",
+    "artistName": "2Z",
+    "goal": "new_song",
+    "durationSeconds": 30,
+    "aspectRatio": "9:16",
+    "targetPlatforms": [
+      "tiktok"
+    ],
+    "targetLanguage": "en",
+    "style": "kpop_mv",
+    "selectedKnowledgeModules": [
+      "2z_basic",
+      "2z_social",
+      "2z_fan"
+    ],
+    "selectedAssets": [
+      "a001",
+      "a002"
+    ],
+    "id": "4663dede-da9b-4ab7-af73-5d0178592e98",
+    "scenes": [
+      {
+        "id": "e5db653e-0f89-421c-ba37-9097904f182a",
+        "order": 1,
+        "startTime": 0,
+        "endTime": 7,
+        "goal": "快速剪辑成员在独特服装/场景中的镜头，营造充满活力的氛围。",
+        "visualDescription": "2Z 成员身穿未来感服装，在霓虹灯闪烁的城市背景下，快速切换特写镜头，伴随强烈的节奏感。",
+        "prompt": "A cinematic vertical 9:16 kpop_mv shot of 2Z members in futuristic outfits, posing dynamically against a neon-lit cityscape background, quick cuts, energetic camera movements, vibrant color grading, 2Z logo subtly integrated, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "",
+        "voiceoverText": "",
+        "musicSuggestion": "强烈的电子合成器音效，快速的鼓点，充满 K-Pop 风格的开场音乐。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "processing",
+        "retryCount": 0,
+        "taskId": "e999e7d3bae0830a423c1b1eb30bcd27",
+        "errorMessage": "状态查询失败，稍后可重试"
+      },
+      {
+        "id": "01b16001-815d-442e-ae87-7abe8034fb06",
+        "order": 2,
+        "startTime": 7,
+        "endTime": 14,
+        "goal": "展示核心编舞，运用高能量的摄像机运动。",
+        "visualDescription": "2Z 成员在聚光灯下表演充满力量和同步性的核心编舞，摄像机快速推拉、旋转，捕捉舞步的细节和整体气势。",
+        "prompt": "A cinematic vertical 9:16 kpop_mv shot of 2Z performing powerful and synchronized core choreography under spotlights, dynamic camera zooms and rotations, capturing intricate dance moves and overall energy, vibrant stage lighting, 2Z branding on stage, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "",
+        "voiceoverText": "",
+        "musicSuggestion": "歌曲主歌部分，节奏感强，带有冲击力的 K-Pop 舞曲。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "5044b929-3858-4c05-82d5-652005d04a1c",
+        "order": 3,
+        "startTime": 14,
+        "endTime": 21,
+        "goal": "特写镜头展示成员演唱关键歌词时的表情，穿插舞蹈。",
+        "visualDescription": "2Z 成员的特写镜头，眼神坚定，情绪饱满地演唱关键歌词，镜头在不同成员之间快速切换，偶尔穿插成员跳舞的片段。",
+        "prompt": "A cinematic vertical 9:16 kpop_mv shot of 2Z members in close-up, singing key lines with intense expressions and focused eyes, rapid cuts between different members, interspersed with short bursts of dynamic dance, dramatic lighting, 2Z's official microphone, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "",
+        "voiceoverText": "",
+        "musicSuggestion": "歌曲副歌部分，旋律抓耳，人声突出，带有爆发力。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "fc39ed77-d18b-4437-a66d-ab1740db03a0",
+        "order": 4,
+        "startTime": 21,
+        "endTime": 28,
+        "goal": "继续展示成员演唱关键歌词时的表情，穿插更多舞蹈。",
+        "visualDescription": "延续上一个镜头，更多成员的特写，展现更丰富的表情和情感，舞蹈片段的切换更加频繁和快速，增加视觉冲击力。",
+        "prompt": "A cinematic vertical 9:16 kpop_mv shot of 2Z members in dynamic close-ups, conveying strong emotions while singing, frequent and rapid cuts to energetic dance sequences, enhancing visual impact, expressive facial details, 2Z's distinctive stage props, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "",
+        "voiceoverText": "",
+        "musicSuggestion": "歌曲副歌高潮部分，节奏更加紧凑，能量感十足。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "b3cbea40-5b63-4831-992e-877400be21ea",
+        "order": 5,
+        "startTime": 28,
+        "endTime": 35,
+        "goal": "高潮舞蹈动作，快速文字覆盖，强烈的 CTA。",
+        "visualDescription": "2Z 成员完成一个标志性的高潮舞蹈动作，镜头从俯视拉远，展现整体气势。随后，快速出现歌曲标题和发布日期的文字叠加，最终以一个强烈的呼吁行动结束。",
+        "prompt": "A cinematic vertical 9:16 kpop_mv shot of 2Z executing a climactic signature dance move, camera pulling back from an overhead view to reveal full formation, followed by a rapid text overlay of '2Z - New Song Title' and 'Release Date: XX.XX.XXXX', ending with a powerful call to action, dynamic lighting, official 2Z branding, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "2Z - New Song Title\nRelease Date: XX.XX.XXXX\n#2Z #NewSong #KPOP",
+        "voiceoverText": "",
+        "musicSuggestion": "歌曲结尾高潮部分，带有冲击力的音效，随后迅速淡出或戛然而止，留下悬念。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      }
+    ],
+    "status": "storyboard",
+    "createdAt": 1778892862408,
+    "updatedAt": 1778893031967,
+    "brief": {
+      "title": "2Z - New Song Teaser (30 Sec K-Pop MV Style)",
+      "coreSellingPoints": [
+        "Dynamic K-Pop choreography",
+        "Catchy new song hook",
+        "2Z's charismatic visuals",
+        "High-energy, trending aesthetic"
+      ],
+      "targetAudience": "K-Pop fans, particularly those interested in boy groups and TikTok trends, aged 13-25.",
+      "emotionKeywords": [
+        "Exciting",
+        "Energetic",
+        "Trendy",
+        "Confident",
+        "Anticipation"
+      ],
+      "storyline": "A fast-paced montage showcasing 2Z's powerful performance of their new song. Focus on dynamic dance breaks, close-ups of members' expressions, and stylish visual effects. The narrative should build excitement for the full release.",
+      "videoStructure": "0-5s: Quick cuts of members in unique outfits/settings, establishing a vibrant mood. 5-15s: Focus on core choreography with high-energy camera movements. 15-25s: Close-ups of individual members singing key lines, interspersed with more dance. 25-30s: climactic dance move, quick text overlay with song title and release date, leading into a strong CTA.",
+      "subtitleStyle": "Bold, neon-colored text with a modern, sans-serif font, appearing rhythmically with the music. English lyrics for key phrases. ",
+      "voiceoverStyle": "N/A (music video focus, no voiceover needed beyond the song itself)",
+      "musicSuggestion": "A 15-20 second snippet of the most impactful and catchy part of 2Z's new song, preferably the chorus or a strong instrumental hook, followed by a short instrumental outro.",
+      "socialMediaTips": "Use trending K-Pop hashtags (#2Z #KPop #NewMusic #TikTokKPop #BoyGroup). Encourage users to use the sound in their own TikToks. Ask questions to drive engagement (e.g., 'What's your favorite part?'). Post during peak TikTok hours.",
+      "ctaSuggestion": "Text overlay: '2Z New Song Out Soon!' and 'Pre-save Now! Link in Bio'. End screen with album art and official release date. Encourage users to 'Follow 2Z for more!'."
+    }
   }
 ]

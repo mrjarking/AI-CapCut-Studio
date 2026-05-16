@@ -10,6 +10,8 @@ export default function DashboardPage() {
   const { data: settings, isLoading } = trpc.settings.get.useQuery();
   const { data: projects } = trpc.projects.list.useQuery();
   const { data: templates } = trpc.media.templates.useQuery();
+  // Prefetch artists so NewProjectPage and KnowledgePage load instantly
+  trpc.media.artists.useQuery();
 
   useEffect(() => {
     if (!isLoading && settings && !settings.isConfigured) {

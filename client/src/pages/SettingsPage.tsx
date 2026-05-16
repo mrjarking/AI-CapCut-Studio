@@ -46,7 +46,12 @@ export default function SettingsPage() {
       refetch();
       toast.success("设置已保存");
     },
-    onError: (err) => toast.error(`保存失败: ${err.message}`),
+    onError: (err) => {
+      // Show detailed error to help debug "don't match" issues
+      const msg = err.message || String(err);
+      toast.error(`保存失败: ${msg}`, { duration: 8000 });
+      console.error('[SettingsPage] save error:', err);
+    },
   });
 
   const testMutation = trpc.settings.testConnection.useMutation({
@@ -64,7 +69,17 @@ export default function SettingsPage() {
   });
 
   const handleSave = () => {
-    const payload: Record<string, unknown> = {
+    // Use typed object to avoid tRPC type mismatch
+    const payload: {
+      apiBaseUrl?: string;
+      apiToken?: string;
+      apiProvider?: "veo3" | "mock";
+      defaultModel?: string;
+      mockMode?: boolean;
+      watermark?: string;
+      generateApiPath?: string;
+      statusApiPath?: string;
+    } = {
       apiBaseUrl: form.apiBaseUrl,
       mockMode: form.mockMode,
       apiProvider: form.apiProvider,

@@ -10,7 +10,7 @@ export default function KnowledgePage() {
   const { id } = useParams<{ id: string }>();
   const [, navigate] = useLocation();
   const { data: project } = trpc.projects.get.useQuery({ id });
-  const { data: artists, isLoading: artistsLoading } = trpc.media.artists.useQuery();
+  const { data: artists, isLoading: artistsLoading, isError: artistsError, refetch: refetchArtists } = trpc.media.artists.useQuery();
 
   const [selected, setSelected] = useState<string[]>(project?.selectedKnowledgeModules ?? []);
 
@@ -84,10 +84,16 @@ export default function KnowledgePage() {
                   <div className="h-3 bg-white/5 rounded w-full" />
                 </div>
               ))
+            ) : artistsError ? (
+              <div className="text-center py-8 space-y-2">
+                <p className="text-sm text-[oklch(0.65_0.25_25)]">知识库加载失败</p>
+                <button onClick={() => refetchArtists()} className="text-xs text-[oklch(0.6_0.28_290)] underline">点击重试</button>
+              </div>
             ) : !artist ? (
               <div className="text-center py-8 text-sm text-muted-foreground">
                 <p>未找到对应艺人的知识库</p>
                 <p className="text-xs mt-1">artistId: {project?.artistId || '未设置'}</p>
+                <button onClick={() => refetchArtists()} className="text-xs text-[oklch(0.6_0.28_290)] underline mt-2 block mx-auto">点击刷新</button>
               </div>
             ) : artist.knowledgeModules.length === 0 ? (
               <div className="text-center py-8 text-sm text-muted-foreground">该艺人暂无知识库模块</div>
