@@ -285,6 +285,7 @@
     "errorMessage": "状态查询失败，稍后可重试"
   },
   {
+<<<<<<< Updated upstream
     "taskId": "models/veo-3.1-fast-generate-preview/operations/msbekznhucea",
     "projectId": "3de6f5b5-9301-41fd-b219-f306833eff28",
     "sceneId": "8c0708df-9d52-40f0-88ee-410204b86cde",
@@ -305,5 +306,104 @@
     "updatedAt": 1778926067382,
     "retryCount": 0,
     "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/mxbvswzmw5kb:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
+=======
+    "taskId": "dc0fc55ef9cfbc376a42e0637693fe17",
+    "projectId": "1dc2c461-4498-4f16-8fe1-c8525218c019",
+    "sceneId": "008a7692-d9f8-45e9-b0cd-27a8daebda0a",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778896190271,
+    "updatedAt": 1778900200494,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "2055468233263554562",
+    "projectId": "1dc2c461-4498-4f16-8fe1-c8525218c019",
+    "sceneId": "88d32c01-4d8e-4f21-9cca-6c3f13cd3fa8",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778896791019,
+    "updatedAt": 1778900206610,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "2055468914745688066",
+    "projectId": "1dc2c461-4498-4f16-8fe1-c8525218c019",
+    "sceneId": "e3e2b3be-f500-45ce-a1b6-5efad9c4a0af",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778896953223,
+    "updatedAt": 1778900211897,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "2055471261542662146",
+    "projectId": "1dc2c461-4498-4f16-8fe1-c8525218c019",
+    "sceneId": "d4ed2918-9510-4962-91ca-f6c4dfbf1b4d",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778897513116,
+    "updatedAt": 1778900217712,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "2055472343991861249",
+    "projectId": "1dc2c461-4498-4f16-8fe1-c8525218c019",
+    "sceneId": "56be419c-4d30-4e61-860e-7792bad329f9",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778897770772,
+    "updatedAt": 1778900222946,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "2055480107531120641",
+    "projectId": "1dc2c461-4498-4f16-8fe1-c8525218c019",
+    "sceneId": "f2885789-5a94-471e-aac2-85fbba83596e",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778899622066,
+    "updatedAt": 1778900254010,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "2055480988959924226",
+    "projectId": "1dc2c461-4498-4f16-8fe1-c8525218c019",
+    "sceneId": "8cf0b91e-7515-41d9-9b4b-4afe2e961cce",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778899832481,
+    "updatedAt": 1778900071907,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "2055481846669926402",
+    "projectId": "1dc2c461-4498-4f16-8fe1-c8525218c019",
+    "sceneId": "5601765a-70b0-481d-b358-188ee4665f35",
+    "provider": "veo3",
+    "status": "processing",
+    "createdAt": 1778900036970,
+    "updatedAt": 1778900076541,
+    "retryCount": 0,
+    "errorMessage": "状态查询失败，稍后可重试"
+  },
+  {
+    "taskId": "task_sjuROc7yto1pd8Seb34MG1FoEBqWQgXQ",
+    "projectId": "c9880bd8-1299-43f9-b9c0-2c3d8f0610bb",
+    "sceneId": "c8c9b0fc-e00f-4966-85a8-f1e8fc918b83",
+    "provider": "veo3",
+    "status": "submitted",
+    "createdAt": 1778938503954,
+    "updatedAt": 1778938503954,
+    "retryCount": 0,
+    "model": "doubao-seedance-2-0-720p"
+>>>>>>> Stashed changes
   }
 ]

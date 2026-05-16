@@ -381,6 +381,17 @@ export default function SettingsPage() {
             API Token 仅保存在服务器本地文件，前端只展示脱敏版本，不会传输到任何第三方服务。
           </p>
         </div>
+
+        {/* relaydance.com specific note */}
+        {!form.mockMode && form.apiBaseUrl.includes('relaydance') && (
+          <div className="glass-card p-3 bg-[oklch(0.78_0.18_85/0.05)] border-[oklch(0.78_0.18_85/0.2)]">
+            <p className="text-xs text-[oklch(0.78_0.18_85)] font-medium mb-1">ℹ️ relaydance.com 配置说明</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              当前 Token 支持模型：<code className="font-mono text-[oklch(0.7_0.22_200)]">doubao-seedance-2-0-720p</code>。
+              如果状态查询返回 403，请在 relaydance.com 管理后台为该 Token 开启“视频查询”权限。
+            </p>
+          </div>
+        )}
       </div>
     </AppShell>
   );

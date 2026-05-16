@@ -62,9 +62,16 @@ export default function ModelSettingsPage() {
   };
 
   const PRESET_MODELS = [
+<<<<<<< Updated upstream
     { name: "veo-3.1-fast-generate-preview", desc: "Google 原生 · 极速预览，适合快速迭代" },
     { name: "veo3.1-fast", desc: "推荐 · 兼容模式，约 $0.2-0.4 / 镜头" },
     { name: "veo3.1", desc: "高质量模式，约 $0.5-1.0 / 镜头" },
+=======
+    { name: "doubao-seedance-2-0-720p", desc: "推荐 · Doubao Seedance 2.0 720p（relaydance.com）" },
+    { name: "veo3.1-fast", desc: "Veo3.1 快速模式（bltcy.ai 等）" },
+    { name: "veo3.1", desc: "Veo3.1 高质量模式" },
+    { name: "veo3.1-pro", desc: "Veo3.1 专业级模式" },
+>>>>>>> Stashed changes
     { name: "mock", desc: "免费（Mock 演示模式）" },
   ];
   // Note: veo3_fast is deprecated, use veo3.1-fast instead

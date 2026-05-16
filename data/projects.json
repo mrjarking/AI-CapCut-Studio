@@ -57,8 +57,9 @@
         "musicSuggestion": "A powerful, original 2Z track with a strong, driving beat and catchy chorus, or an instrumental version of their most popular song that builds intensity throughout the video.",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "submitted",
+        "retryCount": 0,
+        "taskId": "task_sjuROc7yto1pd8Seb34MG1FoEBqWQgXQ"
       },
       {
         "id": "e91a88dd-3231-491f-8d8c-0cf4bdcbe758",
@@ -186,7 +187,7 @@
     ],
     "status": "briefing",
     "createdAt": 1778854320569,
-    "updatedAt": 1778862498522,
+    "updatedAt": 1778938503960,
     "brief": {
       "title": "2Z LIVE: The Ultimate K-Pop Concert Experience Promo!",
       "coreSellingPoints": [
@@ -787,17 +788,27 @@
     }
   },
   {
+<<<<<<< Updated upstream
     "name": "2Z 参与粉丝见面会",
     "userRole": "fan_operator",
     "artistId": "2z",
     "artistName": "2Z",
     "goal": "fan_interaction",
     "durationSeconds": 30,
+=======
+    "name": "2ZCrossRoads",
+    "userRole": "operator",
+    "artistId": "2z",
+    "artistName": "2Z",
+    "goal": "new_song",
+    "durationSeconds": 60,
+>>>>>>> Stashed changes
     "aspectRatio": "9:16",
     "targetPlatforms": [
       "tiktok"
     ],
     "targetLanguage": "zh",
+<<<<<<< Updated upstream
     "style": "fan_support",
     "selectedKnowledgeModules": [
       "2z_basic",
@@ -812,11 +823,25 @@
     "scenes": [
       {
         "id": "8c0708df-9d52-40f0-88ee-410204b86cde",
+=======
+    "style": "cyber_music",
+    "selectedKnowledgeModules": [
+      "2z_basic"
+    ],
+    "selectedAssets": [
+      "a001"
+    ],
+    "id": "1dc2c461-4498-4f16-8fe1-c8525218c019",
+    "scenes": [
+      {
+        "id": "ee82812a-f3c6-4843-a349-7d0b16b86c70",
+>>>>>>> Stashed changes
         "order": 1,
         "startTime": 0,
         "endTime": 7,
         "goal": "开场吸引",
         "visualDescription": "镜头 1：艺人在霓虹灯舞台上登场，光效炫目",
+<<<<<<< Updated upstream
         "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, walking through a futuristic digital stage, slow push-in from wide shot to medium shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
         "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
         "subtitleText": "艺人魅力展示",
@@ -831,11 +856,26 @@
       },
       {
         "id": "178c1329-8145-47fb-a3a3-649547c075c4",
+=======
+        "prompt": "A cinematic vertical 9:16 cyber music shot of Korean fashion rock band 2Z, high fashion styling, neon stage, walking through a futuristic digital stage, slow push-in from wide shot to medium shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "2Z全新音乐风格尝试",
+        "voiceoverText": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！ - 开场吸引",
+        "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "4fa363d7-4879-443a-a8ac-93633fc75b0d",
+>>>>>>> Stashed changes
         "order": 2,
         "startTime": 7,
         "endTime": 14,
         "goal": "艺人魅力展示",
         "visualDescription": "镜头 2：艺人特写镜头，展现个人魅力",
+<<<<<<< Updated upstream
         "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, performing with intense emotion, looking directly at camera, dramatic close-up, slow motion, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
         "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
         "subtitleText": "音乐作品推广",
@@ -850,50 +890,164 @@
       },
       {
         "id": "9a63bb17-fdd7-41aa-8208-33c69e7ea189",
+=======
+        "prompt": "A cinematic vertical 9:16 cyber music shot of Korean fashion rock band 2Z, high fashion styling, neon stage, performing with intense emotion, looking directly at camera, dramatic close-up, slow motion, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "未来感与科技感十足的视觉冲击",
+        "voiceoverText": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！ - 艺人魅力展示",
+        "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "45acd0b8-cf63-4c91-8edb-205c8b6de099",
+>>>>>>> Stashed changes
         "order": 3,
         "startTime": 14,
         "endTime": 21,
         "goal": "音乐氛围渲染",
         "visualDescription": "镜头 3：音乐可视化效果，音浪与光效融合",
+<<<<<<< Updated upstream
         "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, surrounded by music visualization particles and light trails, 360-degree orbit shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
         "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
         "subtitleText": "粉丝互动增强",
         "voiceoverText": "2Z - 30秒宣发视频 - 音乐氛围渲染",
         "musicSuggestion": "使用艺人代表作作为背景音乐",
+=======
+        "prompt": "A cinematic vertical 9:16 cyber music shot of Korean fashion rock band 2Z, high fashion styling, neon stage, surrounded by music visualization particles and light trails, 360-degree orbit shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "强劲的节奏和洗脑旋律",
+        "voiceoverText": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！ - 音乐氛围渲染",
+        "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+>>>>>>> Stashed changes
         "assetsUsed": [],
         "recommendedModel": "veo3",
         "status": "idle",
         "retryCount": 0
       },
       {
+<<<<<<< Updated upstream
         "id": "c382f4a8-b338-40ad-82d2-e0dc91147a96",
+=======
+        "id": "c88208b3-27f0-4808-a880-7f474bb3ea60",
+>>>>>>> Stashed changes
         "order": 4,
         "startTime": 21,
         "endTime": 28,
         "goal": "故事情节推进",
         "visualDescription": "镜头 4：场景切换，展现艺人故事",
+<<<<<<< Updated upstream
         "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, moving through different environments, tracking shot following the artist, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
         "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
         "subtitleText": "艺人魅力展示",
         "voiceoverText": "2Z - 30秒宣发视频 - 故事情节推进",
         "musicSuggestion": "使用艺人代表作作为背景音乐",
+=======
+        "prompt": "A cinematic vertical 9:16 cyber music shot of Korean fashion rock band 2Z, high fashion styling, neon stage, moving through different environments, tracking shot following the artist, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "短小精悍，适合TikTok传播",
+        "voiceoverText": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！ - 故事情节推进",
+        "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+>>>>>>> Stashed changes
         "assetsUsed": [],
         "recommendedModel": "veo3",
         "status": "idle",
         "retryCount": 0
       },
       {
+<<<<<<< Updated upstream
         "id": "872e5998-675e-4d10-bdfa-9fbc1aaa6285",
+=======
+        "id": "b8279942-59e7-4253-8fdc-17a48b313be6",
+>>>>>>> Stashed changes
         "order": 5,
         "startTime": 28,
         "endTime": 35,
         "goal": "情感高潮",
         "visualDescription": "镜头 5：情感爆发时刻，视觉冲击最强",
+<<<<<<< Updated upstream
         "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, delivering the emotional peak of the performance, extreme close-up to wide shot reveal, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
         "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
         "subtitleText": "音乐作品推广",
         "voiceoverText": "2Z - 30秒宣发视频 - 情感高潮",
         "musicSuggestion": "使用艺人代表作作为背景音乐",
+=======
+        "prompt": "A cinematic vertical 9:16 cyber music shot of Korean fashion rock band 2Z, high fashion styling, neon stage, delivering the emotional peak of the performance, extreme close-up to wide shot reveal, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "引发用户对完整歌曲的期待",
+        "voiceoverText": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！ - 情感高潮",
+        "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "17384e6b-df35-419d-90c6-c4cfc8ae6662",
+        "order": 6,
+        "startTime": 35,
+        "endTime": 42,
+        "goal": "品牌植入",
+        "visualDescription": "镜头 6：CisuMusic 品牌元素自然融入",
+        "prompt": "A cinematic vertical 9:16 cyber music shot of Korean fashion rock band 2Z, high fashion styling, neon stage, CisuMusic logo and platform elements integrated into the scene, product reveal shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "2Z全新音乐风格尝试",
+        "voiceoverText": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！ - 品牌植入",
+        "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "19ff7dee-f03b-4224-b727-79604b94da21",
+        "order": 7,
+        "startTime": 42,
+        "endTime": 49,
+        "goal": "粉丝互动",
+        "visualDescription": "镜头 7：粉丝应援画面，群体能量",
+        "prompt": "A cinematic vertical 9:16 cyber music shot of Korean fashion rock band 2Z, high fashion styling, neon stage, fans represented as glowing particles and light beams, aerial wide shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "未来感与科技感十足的视觉冲击",
+        "voiceoverText": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！ - 粉丝互动",
+        "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "225525da-7758-40eb-9e0a-eee2e9023ab6",
+        "order": 8,
+        "startTime": 49,
+        "endTime": 56,
+        "goal": "CTA 引导",
+        "visualDescription": "镜头 8：结尾 CTA 画面，引导关注",
+        "prompt": "A cinematic vertical 9:16 cyber music shot of Korean fashion rock band 2Z, high fashion styling, neon stage, final pose with CTA overlay elements, slow zoom out to reveal full scene, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "强劲的节奏和洗脑旋律",
+        "voiceoverText": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！ - CTA 引导",
+        "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+        "assetsUsed": [],
+        "recommendedModel": "veo3",
+        "status": "idle",
+        "retryCount": 0
+      },
+      {
+        "id": "5b1b0bc3-b889-4940-aace-2b866a1c9ae0",
+        "order": 9,
+        "startTime": 56,
+        "endTime": 63,
+        "goal": "开场吸引",
+        "visualDescription": "镜头 9：艺人在霓虹灯舞台上登场，光效炫目",
+        "prompt": "A cinematic vertical 9:16 cyber music shot of Korean fashion rock band 2Z, high fashion styling, neon stage, walking through a futuristic digital stage, slow push-in from wide shot to medium shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
+        "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
+        "subtitleText": "短小精悍，适合TikTok传播",
+        "voiceoverText": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！ - 开场吸引",
+        "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+>>>>>>> Stashed changes
         "assetsUsed": [],
         "recommendedModel": "veo3",
         "status": "idle",
@@ -901,6 +1055,7 @@
       }
     ],
     "status": "storyboard",
+<<<<<<< Updated upstream
     "createdAt": 1778924683868,
     "updatedAt": 1778926067384,
     "brief": {
@@ -924,6 +1079,35 @@
       "musicSuggestion": "使用艺人代表作作为背景音乐",
       "socialMediaTips": "发布时间选择晚上8-10点，配合话题标签 #CisuMusic",
       "ctaSuggestion": "关注艺人 | 点击链接了解更多"
+=======
+    "createdAt": 1778895970169,
+    "updatedAt": 1778926112647,
+    "brief": {
+      "title": "2Z新歌赛博朋克先导片：未来音浪，即刻入侵！",
+      "coreSellingPoints": [
+        "2Z全新音乐风格尝试",
+        "未来感与科技感十足的视觉冲击",
+        "强劲的节奏和洗脑旋律",
+        "短小精悍，适合TikTok传播",
+        "引发用户对完整歌曲的期待"
+      ],
+      "targetAudience": "热爱电子音乐、赛博朋克文化、科技感视觉的年轻群体，尤其是TikTok活跃用户，追求新鲜刺激和潮流音乐体验。",
+      "emotionKeywords": [
+        "震撼",
+        "未来",
+        "神秘",
+        "动感",
+        "酷炫",
+        "期待"
+      ],
+      "storyline": "视频以2Z的标志性logo在数字矩阵中闪现开场，随后画面快速切换，展现霓虹灯、全息投影、机械手臂、穿梭于未来都市的飞行器等赛博朋克元素。2Z本人则以虚拟形象或未来感造型出镜，在数字空间中进行表演。视频中穿插新歌高潮部分的片段，配合强烈的视觉特效，营造出强烈的未来科技感和音乐爆发力。结尾以歌曲名称和“敬请期待”的字样收尾。",
+      "videoStructure": "0-5秒：片头，2Z logo在数字矩阵中闪现，简短的音效引入。5-20秒：快速剪辑赛博朋克场景，配合新歌Intro部分，节奏感逐渐增强。20-45秒：2Z未来感造型出镜，演唱新歌高潮部分，配合炫酷特效和歌词展示。45-55秒：视觉和听觉冲击达到高潮，展示新歌名称和专辑封面（若有）。55-60秒：CTA，引导用户关注并期待完整歌曲发布。",
+      "subtitleStyle": "赛博朋克风格的霓虹灯字体，动态闪烁或渐变效果，配合歌曲节奏出现，突出歌词的未来感和力量感。",
+      "voiceoverStyle": "无需旁白，主要通过音乐和视觉叙事。",
+      "musicSuggestion": "2Z新歌的精华片段，选择节奏感最强、旋律最抓耳的高潮部分。音乐风格应是融合电子、工业、合成器元素的赛博朋克电子乐。",
+      "socialMediaTips": "发布时使用#2Z新歌 #赛博朋克音乐 #未来音浪 #新歌预告 等热门话题。鼓励用户猜测歌曲主题或分享对赛博朋克元素的看法。可以发起挑战活动，例如模仿视频中的未来感造型或手势。",
+      "ctaSuggestion": "“点击关注2Z，第一时间收听完整新歌！” “新歌即将上线，敬请期待！” “探索未来音浪，和2Z一起进入赛博世界！”并引导用户点击个人主页链接或预存链接。"
+>>>>>>> Stashed changes
     }
   }
 ]

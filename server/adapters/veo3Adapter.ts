@@ -180,9 +180,12 @@ function buildLegacyVeoBody(req: GenerateVideoRequest): Record<string, unknown> 
 
 // ─── Status ───────────────────────────────────────────────────────────────────
 
-export async function veo3GetStatus(taskId: string): Promise<VideoStatusResponse> {
+export async function veo3GetStatus(taskId: string, model?: string): Promise<VideoStatusResponse> {
   const settings = await getSettings();
-  const { apiBaseUrl, apiToken, statusApiPath } = settings;
+  const { apiBaseUrl, apiToken, statusApiPath, defaultModel } = settings;
+
+  // Use provided model or fall back to settings default
+  const modelName = model || defaultModel || "";
 
   const headers = {
     Authorization: `Bearer ${apiToken}`,
@@ -198,8 +201,12 @@ export async function veo3GetStatus(taskId: string): Promise<VideoStatusResponse
     const url = `${apiBaseUrl}${customPath.replace("{taskId}", taskId)}`;
     endpointsToTry.push({ method: "get", url });
   } else {
+    // Try with model query param first (new-api style: needs model to route)
+    const modelParam = modelName ? `?model=${encodeURIComponent(modelName)}` : "";
     endpointsToTry.push(
-      // OpenAI-compatible style (most common)
+      // new-api style: GET with model query param
+      { method: "get", url: `${apiBaseUrl}/v1/video/generations/${taskId}${modelParam}` },
+      // OpenAI-compatible style without model param
       { method: "get", url: `${apiBaseUrl}/v1/video/generations/${taskId}` },
       // Legacy Veo3 paths
       { method: "get", url: `${apiBaseUrl}/api/v1/veo/record-info?taskId=${taskId}` },
@@ -259,10 +266,15 @@ export async function veo3GetStatus(taskId: string): Promise<VideoStatusResponse
     }
   }
 
+  // All endpoints failed - this is common with new-api tokens that only have 'generate' permission
+  // Return 'processing' so the frontend keeps polling
+  console.warn(`[veo3GetStatus] All status endpoints failed for task ${taskId}. ` +
+    `This may be a token permission issue (token needs 'video_query' permission in new-api). ` +
+    `Task will remain in 'processing' state until status can be queried.`);
   return {
     taskId,
     provider: "veo3",
     status: "processing",
-    errorMessage: "状态查询失败，稍后可重试",
+    errorMessage: undefined, // Don't show error - keep polling silently
   };
 }
