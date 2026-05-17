@@ -7,6 +7,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff, Shield, Wifi, Zap, Trash2, ChevronDown, ChevronUp, Info } from "lucide-react";
 
+type VideoProvider = "veo3" | "google_veo" | "seedance";
+
+const DEFAULT_MODEL_BY_PROVIDER: Record<VideoProvider, string> = {
+  google_veo: "veo-3.1-fast-generate-preview",
+  veo3: "veo3.1-fast",
+  seedance: "seedance-1-0-pro",
+};
+
+const PROVIDER_OPTIONS: Array<{ id: VideoProvider; label: string; hint: string; icon: typeof Wifi }> = [
+  { id: "google_veo", label: "Google Veo", hint: "默认视频模型", icon: Zap },
+  { id: "veo3", label: "OpenAI API", hint: "兼容接口", icon: Wifi },
+  { id: "seedance", label: "Seedance", hint: "兼容接口", icon: Zap },
+];
+
 export default function SettingsPage() {
   const [, navigate] = useLocation();
   const { data: settings, refetch } = trpc.settings.get.useQuery();
@@ -17,9 +31,9 @@ export default function SettingsPage() {
   const [form, setForm] = useState({
     apiBaseUrl: "",
     apiToken: "",
-    mockMode: true,
-    apiProvider: "mock" as "veo3" | "google_veo" | "mock",
-    defaultModel: "mock",
+    mockMode: false,
+    apiProvider: "google_veo" as VideoProvider,
+    defaultModel: DEFAULT_MODEL_BY_PROVIDER.google_veo,
     watermark: "CisuMusic",
     generateApiPath: "",
     statusApiPath: "",
@@ -29,15 +43,18 @@ export default function SettingsPage() {
     llmToken: "",
     llmModel: "gemini-1.5-flash",
   });
+  const [modelOptions, setModelOptions] = useState<string[]>([DEFAULT_MODEL_BY_PROVIDER.google_veo]);
+  const [modelMessage, setModelMessage] = useState("");
 
   useEffect(() => {
     if (settings) {
+      const visibleProvider = settings.apiProvider === "mock" ? "google_veo" : settings.apiProvider as VideoProvider;
       setForm({
         apiBaseUrl: settings.apiBaseUrl,
         apiToken: "",
-        mockMode: settings.mockMode,
-        apiProvider: settings.apiProvider,
-        defaultModel: settings.defaultModel,
+        mockMode: false,
+        apiProvider: visibleProvider,
+        defaultModel: settings.defaultModel === "mock" ? DEFAULT_MODEL_BY_PROVIDER[visibleProvider] : settings.defaultModel,
         watermark: settings.watermark,
         generateApiPath: settings.generateApiPath ?? "",
         statusApiPath: settings.statusApiPath ?? "",
@@ -48,6 +65,53 @@ export default function SettingsPage() {
       });
     }
   }, [settings]);
+
+  const listModelsMutation = trpc.settings.listModels.useMutation({
+    onSuccess: (res) => {
+      const models = res.models ?? [];
+      setModelOptions(models.length ? models : [DEFAULT_MODEL_BY_PROVIDER[form.apiProvider]]);
+      setModelMessage(res.message ?? (models.length ? "模型列表已更新" : "未拉取到模型，已保留推荐默认值"));
+      if (models.length && !models.includes(form.defaultModel)) {
+        setForm((f) => ({ ...f, defaultModel: models[0] }));
+      }
+    },
+    onError: (err) => {
+      setModelOptions([DEFAULT_MODEL_BY_PROVIDER[form.apiProvider]]);
+      setModelMessage(`模型列表拉取失败：${err.message}`);
+    },
+  });
+
+  useEffect(() => {
+    const hasToken = !!form.apiToken || !!(settings?.maskedToken && settings.maskedToken !== "***");
+    const needsBaseUrl = form.apiProvider !== "google_veo";
+    if (!hasToken || (needsBaseUrl && !form.apiBaseUrl.trim())) {
+      setModelOptions([DEFAULT_MODEL_BY_PROVIDER[form.apiProvider]]);
+      setModelMessage(hasToken ? "填写 API Base URL 后自动拉取模型列表" : "填写 API Token 后自动拉取模型列表");
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      listModelsMutation.mutate({
+        apiProvider: form.apiProvider,
+        apiBaseUrl: form.apiBaseUrl,
+        apiToken: form.apiToken,
+      });
+    }, 600);
+
+    return () => window.clearTimeout(timer);
+  }, [form.apiProvider, form.apiBaseUrl, form.apiToken, settings?.maskedToken]);
+
+  const selectProvider = (provider: VideoProvider) => {
+    setForm((f) => ({
+      ...f,
+      mockMode: false,
+      apiProvider: provider,
+      apiBaseUrl: provider === "google_veo" ? "" : f.apiBaseUrl,
+      defaultModel: DEFAULT_MODEL_BY_PROVIDER[provider],
+    }));
+    setModelOptions([DEFAULT_MODEL_BY_PROVIDER[provider]]);
+    setModelMessage("");
+  };
 
   const saveMutation = trpc.settings.save.useMutation({
     onSuccess: () => {
@@ -82,15 +146,19 @@ export default function SettingsPage() {
     const payload: {
       apiBaseUrl?: string;
       apiToken?: string;
-      apiProvider?: "veo3" | "google_veo" | "mock";
+      apiProvider?: "veo3" | "google_veo" | "seedance";
       defaultModel?: string;
       mockMode?: boolean;
       watermark?: string;
       generateApiPath?: string;
       statusApiPath?: string;
+      llmProvider?: "forge" | "openai" | "google" | "custom";
+      llmBaseUrl?: string;
+      llmToken?: string;
+      llmModel?: string;
     } = {
       apiBaseUrl: form.apiBaseUrl,
-      mockMode: form.mockMode,
+      mockMode: false,
       apiProvider: form.apiProvider,
       defaultModel: form.defaultModel,
       watermark: form.watermark,
@@ -112,8 +180,8 @@ export default function SettingsPage() {
         <div className="glass-card p-4 space-y-2">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">当前状态</h3>
           <div className="flex items-center gap-2">
-            <div className={`w-2 h-2 rounded-full ${settings?.mockMode ? "bg-[oklch(0.78_0.18_85)] animate-pulse" : "bg-[oklch(0.7_0.2_145)]"}`} />
-            <span className="text-sm">{settings?.mockMode ? "Mock Mode（演示）" : `Real API · ${settings?.apiProvider}`}</span>
+            <div className="w-2 h-2 rounded-full bg-[oklch(0.7_0.2_145)]" />
+            <span className="text-sm">Real API · {settings?.apiProvider === "mock" ? "google_veo" : settings?.apiProvider}</span>
           </div>
           {settings?.apiBaseUrl && (
             <p className="text-xs text-muted-foreground">Base URL: {settings.apiBaseUrl}</p>
@@ -130,51 +198,33 @@ export default function SettingsPage() {
         <div className="space-y-2">
           <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">运行模式</h3>
           <div className="flex gap-3">
-            <button
-              onClick={() => setForm((f) => ({ ...f, mockMode: true, apiProvider: "mock", defaultModel: "mock" }))}
-              className={`flex-1 flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all ${
-                form.mockMode
-                  ? "border-[oklch(0.6_0.28_290/0.6)] bg-[oklch(0.6_0.28_290/0.1)] text-[oklch(0.6_0.28_290)]"
-                  : "border-border text-muted-foreground"
-              }`}
-            >
-              <Zap size={16} />
-              <span className="text-xs font-medium">Mock Mode</span>
-            </button>
-            <button
-              onClick={() => setForm((f) => ({ ...f, mockMode: false, apiProvider: "veo3" }))}
-              className={`flex-1 flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all ${
-                !form.mockMode && form.apiProvider === "veo3"
-                  ? "border-[oklch(0.7_0.22_200/0.6)] bg-[oklch(0.7_0.22_200/0.1)] text-[oklch(0.7_0.22_200)]"
-                  : "border-border text-muted-foreground"
-              }`}
-            >
-              <Wifi size={16} />
-              <span className="text-xs font-medium">OpenAI API</span>
-            </button>
-            <button
-              onClick={() => setForm((f) => ({ ...f, mockMode: false, apiProvider: "google_veo", defaultModel: "veo-3.1-fast-generate-preview" }))}
-              className={`flex-1 flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all ${
-                !form.mockMode && form.apiProvider === "google_veo"
-                  ? "border-[oklch(0.78_0.18_85/0.6)] bg-[oklch(0.78_0.18_85/0.1)] text-[oklch(0.78_0.18_85)]"
-                  : "border-border text-muted-foreground"
-              }`}
-            >
-              <Zap size={16} />
-              <span className="text-xs font-medium">Google Veo</span>
-            </button>
+            {PROVIDER_OPTIONS.map((provider) => (
+              <button
+                key={provider.id}
+                onClick={() => selectProvider(provider.id)}
+                className={`flex-1 flex flex-col items-center gap-1.5 p-3 rounded-xl border transition-all ${
+                  form.apiProvider === provider.id
+                    ? "border-[oklch(0.7_0.22_200/0.6)] bg-[oklch(0.7_0.22_200/0.1)] text-[oklch(0.7_0.22_200)]"
+                    : "border-border text-muted-foreground"
+                }`}
+              >
+                <provider.icon size={16} />
+                <span className="text-xs font-medium">{provider.label}</span>
+                <span className="text-[10px] opacity-70">{provider.hint}</span>
+              </button>
+            ))}
           </div>
         </div>
 
         {/* API Config */}
-        {!form.mockMode && (
+        {(
           <div className="space-y-3">
             <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">API 配置</h3>
 
             <div className="space-y-1.5">
               <label className="text-xs text-muted-foreground">API Base URL</label>
               <Input
-                placeholder={form.apiProvider === "google_veo" ? "https://generativelanguage.googleapis.com (Auto)" : "https://api.example.com"}
+                placeholder={form.apiProvider === "google_veo" ? "https://generativelanguage.googleapis.com (Auto)" : form.apiProvider === "seedance" ? "https://ark.cn-beijing.volces.com/api" : "https://api.example.com"}
                 value={form.apiBaseUrl}
                 disabled={form.apiProvider === "google_veo"}
                 onChange={(e) => setForm((f) => ({ ...f, apiBaseUrl: e.target.value }))}
@@ -212,14 +262,17 @@ export default function SettingsPage() {
 
             <div className="space-y-1.5">
               <label className="text-xs text-muted-foreground">模型名称</label>
-              <Input
-                placeholder="例如: veo3, veo3_fast, veo3.1-fast"
-                value={form.defaultModel === "mock" ? "" : form.defaultModel}
-                onChange={(e) => setForm((f) => ({ ...f, defaultModel: e.target.value || "veo3" }))}
-                className="text-sm"
-              />
+              <select
+                value={form.defaultModel}
+                onChange={(e) => setForm((f) => ({ ...f, defaultModel: e.target.value }))}
+                className="w-full h-10 px-3 rounded-lg text-sm bg-[oklch(0.1_0.01_285)] border border-border outline-none focus:border-[oklch(0.6_0.28_290/0.5)]"
+              >
+                {modelOptions.map((model) => (
+                  <option key={model} value={model}>{model}</option>
+                ))}
+              </select>
               <p className="text-[10px] text-muted-foreground">
-                填写 API 服务商支持的具体模型名称
+                {listModelsMutation.isPending ? "正在拉取模型列表..." : modelMessage || "设置 URL 和 Token 后自动拉取模型列表"}
               </p>
             </div>
 
@@ -346,16 +399,14 @@ export default function SettingsPage() {
 
         {/* Actions */}
         <div className="space-y-3">
-          {!form.mockMode && (
-            <Button
-              variant="outline"
-              onClick={() => testMutation.mutate()}
-              disabled={testMutation.isPending}
-              className="w-full border-border"
-            >
-              {testMutation.isPending ? "测试中..." : "测试 API 连接"}
-            </Button>
-          )}
+          <Button
+            variant="outline"
+            onClick={() => testMutation.mutate()}
+            disabled={testMutation.isPending}
+            className="w-full border-border"
+          >
+            {testMutation.isPending ? "测试中..." : "测试 API 连接"}
+          </Button>
           <Button
             onClick={handleSave}
             disabled={saveMutation.isPending}

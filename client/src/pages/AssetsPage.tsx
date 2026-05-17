@@ -4,7 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import AppShell from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Search } from "lucide-react";
+import { CheckCircle2, Search, Upload } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
 const TYPE_LABELS: Record<string, string> = {
@@ -23,12 +23,13 @@ const TYPE_LABELS: Record<string, string> = {
 export default function AssetsPage() {
   const { id } = useParams<{ id: string }>();
   const [, navigate] = useLocation();
-  const { data: assets } = trpc.media.assets.useQuery();
+  const { data: assets, refetch: refetchAssets } = trpc.media.assets.useQuery();
   const { data: project } = trpc.projects.get.useQuery({ id });
 
   const [selected, setSelected] = useState<string[]>(project?.selectedAssets ?? []);
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<string>("all");
+  const [uploading, setUploading] = useState(false);
 
   const updateMutation = trpc.projects.update.useMutation({
     onSuccess: () => navigate(`/projects/${id}/brief`),
@@ -45,18 +46,61 @@ export default function AssetsPage() {
     setSelected((prev) => prev.includes(assetId) ? prev.filter((x) => x !== assetId) : [...prev, assetId]);
   };
 
+  const handleUpload = async (file: File | null) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("请上传图片文件");
+      return;
+    }
+    const body = new FormData();
+    body.append("file", file);
+    body.append("name", file.name.replace(/\.[^.]+$/, ""));
+    if (project?.artistId) body.append("artistId", project.artistId);
+    body.append("tags", [project?.artistName, "运营上传"].filter(Boolean).join(","));
+
+    setUploading(true);
+    try {
+      const resp = await fetch("/api/uploads/images", { method: "POST", body });
+      if (!resp.ok) throw new Error(await resp.text());
+      const data = await resp.json();
+      if (data.asset?.id) setSelected((prev) => [data.asset.id, ...prev]);
+      await refetchAssets();
+      toast.success("图片素材已上传");
+    } catch (err) {
+      toast.error(`上传失败: ${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <AppShell title="选择素材" backHref={`/projects/${id}/knowledge`} showNav={false}>
       <div className="px-4 py-4 space-y-4">
         {/* Search */}
-        <div className="relative">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="搜索素材..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-8 text-sm"
-          />
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="搜索素材..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-8 text-sm"
+            />
+          </div>
+          <label className={`h-10 px-3 rounded-lg border border-border flex items-center gap-1.5 text-xs text-muted-foreground ${uploading ? "opacity-60" : "cursor-pointer hover:text-foreground"}`}>
+            <Upload size={14} />
+            {uploading ? "上传中" : "上传"}
+            <input
+              type="file"
+              accept="image/*"
+              disabled={uploading}
+              onChange={(e) => {
+                handleUpload(e.target.files?.[0] ?? null);
+                e.currentTarget.value = "";
+              }}
+              className="hidden"
+            />
+          </label>
         </div>
 
         {/* Type Filter */}

@@ -4,13 +4,80 @@ import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 import AppShell from "@/components/AppShell";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Edit3, ChevronDown, ChevronUp } from "lucide-react";
-import type { VideoBrief } from "@/types";
+import { Sparkles, Edit3, ChevronDown, ChevronUp, LayoutTemplate } from "lucide-react";
+import type { Project, VideoBrief } from "@/types";
+
+const DEFAULT_BRIEF_TEMPLATES: Array<{ id: string; name: string; brief: VideoBrief }> = [
+  {
+    id: "launch",
+    name: "新歌发布宣发",
+    brief: {
+      title: "新歌上线高能预告",
+      coreSellingPoints: ["新作品核心旋律", "艺人视觉记忆点", "平台首发福利"],
+      targetAudience: "关注亚洲流行音乐、短视频音乐趋势和艺人动态的年轻用户",
+      emotionKeywords: ["期待", "心动", "高能", "分享欲"],
+      storyline: "用一个强钩子的开场制造悬念，随后展示艺人状态、作品氛围和平台入口，最后用明确 CTA 引导收听。",
+      videoStructure: "3 秒 Hook → 艺人/作品亮点 → 情绪高潮 → CisuMusic CTA",
+      subtitleStyle: "短句大字，关键词霓虹高亮，适合竖屏快速扫读",
+      voiceoverStyle: "年轻、有节奏、带一点发布倒计时的兴奋感",
+      musicSuggestion: "优先使用新歌副歌或最强 hook 段落",
+      socialMediaTips: "发布时配合倒计时、评论区置顶试听入口和艺人话题标签",
+      ctaSuggestion: "立即在 CisuMusic 收听完整版",
+    },
+  },
+  {
+    id: "artist-story",
+    name: "艺人故事向",
+    brief: {
+      title: "一分钟认识这位艺人",
+      coreSellingPoints: ["艺人背景", "音乐态度", "代表作品"],
+      targetAudience: "第一次接触该艺人的泛音乐用户和潜在粉丝",
+      emotionKeywords: ["真实", "共鸣", "记住", "靠近"],
+      storyline: "从一个能代表艺人的瞬间切入，逐步展开成长、作品与粉丝连接，形成可被转发的艺人名片。",
+      videoStructure: "人物瞬间 → 背景介绍 → 作品与态度 → 粉丝连接 → 关注 CTA",
+      subtitleStyle: "纪录片式短句，重点信息用品牌色强调",
+      voiceoverStyle: "温暖、可信、像朋友介绍一位值得认识的音乐人",
+      musicSuggestion: "使用艺人代表作品的氛围段落做底",
+      socialMediaTips: "适合小红书、YouTube Shorts、视频号等需要信息密度的平台",
+      ctaSuggestion: "关注艺人，收藏这份音乐人档案",
+    },
+  },
+  {
+    id: "event",
+    name: "活动/演出推广",
+    brief: {
+      title: "活动倒计时宣传片",
+      coreSellingPoints: ["活动时间节点", "现场氛围", "参与福利"],
+      targetAudience: "已关注艺人的粉丝、城市本地音乐用户和活动潜在参与者",
+      emotionKeywords: ["倒计时", "现场感", "参与", "热烈"],
+      storyline: "用倒计时建立紧迫感，穿插艺人和现场素材，展示福利与参与方式，推动预约或购票。",
+      videoStructure: "倒计时 Hook → 现场能量 → 福利信息 → 参与路径 → CTA",
+      subtitleStyle: "信息型字幕，时间地点福利必须清晰",
+      voiceoverStyle: "直接、兴奋、有活动广播感",
+      musicSuggestion: "节奏明确的现场或鼓点音乐",
+      socialMediaTips: "发布后 24 小时内配合评论区答疑和二次提醒",
+      ctaSuggestion: "立即预约，不错过现场",
+    },
+  },
+];
+
+function historyBriefTemplates(projects: Project[] | undefined, currentId: string) {
+  return (projects ?? [])
+    .filter((project) => project.id !== currentId && project.brief)
+    .slice(-6)
+    .reverse()
+    .map((project) => ({
+      id: `history-${project.id}`,
+      name: `历史：${project.name}`,
+      brief: project.brief as VideoBrief,
+    }));
+}
 
 export default function BriefPage() {
   const { id } = useParams<{ id: string }>();
   const [, navigate] = useLocation();
   const { data: project, refetch } = trpc.projects.get.useQuery({ id });
+  const { data: projects } = trpc.projects.list.useQuery();
   const [editingBrief, setEditingBrief] = useState<VideoBrief | null>(null);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
@@ -29,6 +96,7 @@ export default function BriefPage() {
   });
 
   const brief = editingBrief ?? project?.brief;
+  const templates = [...DEFAULT_BRIEF_TEMPLATES, ...historyBriefTemplates(projects, id)];
 
   const handleNext = () => {
     if (!brief) { toast.error("请先生成策划案"); return; }
@@ -62,6 +130,28 @@ export default function BriefPage() {
             </p>
           </div>
         </button>
+
+        <div className="space-y-2">
+          <div className="flex items-center gap-1.5">
+            <LayoutTemplate size={14} className="text-[oklch(0.6_0.28_290)]" />
+            <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">策划案模板参考</h3>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none">
+            {templates.map((template) => (
+              <button
+                key={template.id}
+                onClick={() => {
+                  setEditingBrief(template.brief);
+                  toast.success("已套用策划案模板");
+                }}
+                className="w-48 flex-shrink-0 glass-card p-3 text-left border-border hover:bg-white/[0.02]"
+              >
+                <p className="text-xs font-semibold truncate">{template.name}</p>
+                <p className="text-[10px] text-muted-foreground mt-1 line-clamp-2">{template.brief.storyline}</p>
+              </button>
+            ))}
+          </div>
+        </div>
 
         {/* Brief Content */}
         {brief && (

@@ -12,6 +12,7 @@ export default function ModelSettingsPage() {
   const [, navigate] = useLocation();
   const { data: settings } = trpc.settings.get.useQuery();
   const utils = trpc.useUtils();
+  const [modelOptions, setModelOptions] = useState<string[]>(["veo-3.1-fast-generate-preview"]);
 
   const [form, setForm] = useState({
     defaultModel: settings?.defaultModel ?? "veo3.1-fast",
@@ -48,26 +49,31 @@ export default function ModelSettingsPage() {
     onError: (err) => toast.error(`保存失败: ${err.message}`),
   });
 
+  const listModelsMutation = trpc.settings.listModels.useMutation({
+    onSuccess: (res) => {
+      if (res.models?.length) setModelOptions(res.models);
+    },
+  });
+
+  useEffect(() => {
+    if (settings?.defaultModel) {
+      setModelOptions((options) => Array.from(new Set([settings.defaultModel, ...options.filter((m) => m !== "mock")])));
+    }
+    if (settings && settings.apiProvider !== "mock") {
+      listModelsMutation.mutate({ apiProvider: settings.apiProvider });
+    }
+  }, [settings?.apiProvider, settings?.defaultModel]);
+
   const handleSave = () => {
     const updates: any = { ...form };
     
     // Auto-switch provider if user picks a Google-native model
     if (form.defaultModel.startsWith("veo-")) {
       updates.apiProvider = "google_veo";
-    } else if (form.defaultModel === "mock") {
-      updates.apiProvider = "mock";
     }
 
     saveMutation.mutate(updates);
   };
-
-  const PRESET_MODELS = [
-    { name: "veo-3.1-fast-generate-preview", desc: "Google 原生 · 极速预览，适合快速迭代" },
-    { name: "veo3.1-fast", desc: "推荐 · 兼容模式，约 $0.2-0.4 / 镜头" },
-    { name: "veo3.1", desc: "高质量模式，约 $0.5-1.0 / 镜头" },
-    { name: "mock", desc: "免费（Mock 演示模式）" },
-  ];
-  // Note: veo3_fast is deprecated, use veo3.1-fast instead
 
   return (
     <AppShell title="模型配置" backHref={`/projects/${id}/storyboard`} showNav={false}>
@@ -75,27 +81,18 @@ export default function ModelSettingsPage() {
         {/* Model */}
         <Section title="默认模型">
           <div className="space-y-2">
-            {PRESET_MODELS.map((m) => (
-              <button
-                key={m.name}
-                onClick={() => setForm((f) => ({ ...f, defaultModel: m.name }))}
-                className={`w-full glass-card p-3 flex items-center justify-between text-left transition-all ${
-                  form.defaultModel === m.name
-                    ? "border-[oklch(0.6_0.28_290/0.5)] bg-[oklch(0.6_0.28_290/0.06)]"
-                    : "border-border"
-                }`}
-              >
-                <div>
-                  <p className="text-sm font-medium" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>{m.name}</p>
-                  <p className="text-xs text-muted-foreground">{m.desc}</p>
-                </div>
-                <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                  form.defaultModel === m.name ? "border-[oklch(0.6_0.28_290)]" : "border-border"
-                }`}>
-                  {form.defaultModel === m.name && <div className="w-2 h-2 rounded-full bg-[oklch(0.6_0.28_290)]" />}
-                </div>
-              </button>
-            ))}
+            <select
+              value={form.defaultModel}
+              onChange={(e) => setForm((f) => ({ ...f, defaultModel: e.target.value }))}
+              className="w-full h-11 px-3 rounded-lg text-sm bg-[oklch(0.1_0.01_285)] border border-border outline-none focus:border-[oklch(0.6_0.28_290/0.5)]"
+            >
+              {modelOptions.map((model) => (
+                <option key={model} value={model}>{model}</option>
+              ))}
+            </select>
+            <p className="text-xs text-muted-foreground">
+              {listModelsMutation.isPending ? "正在同步模型列表..." : "模型列表来自系统设置中的当前 API 配置"}
+            </p>
           </div>
         </Section>
 

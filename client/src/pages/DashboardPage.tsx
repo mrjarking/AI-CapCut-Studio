@@ -42,9 +42,9 @@ export default function DashboardPage() {
         {settings && (
           <div className="glass-card p-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${settings.mockMode ? "bg-[oklch(0.78_0.18_85)] animate-pulse" : "bg-[oklch(0.7_0.2_145)]"}`} />
+              <div className="w-2 h-2 rounded-full bg-[oklch(0.7_0.2_145)]" />
               <span className="text-xs text-muted-foreground">
-                {settings.mockMode ? "Mock Mode" : `Real API · ${settings.apiProvider}`}
+                Real API · {settings.apiProvider === "mock" ? "google_veo" : settings.apiProvider}
               </span>
             </div>
             <button

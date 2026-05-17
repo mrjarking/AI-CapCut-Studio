@@ -1,6 +1,7 @@
 import { invokeLLM } from "../_core/llm.js";
 import type { Project, VideoBrief, Scene } from "../types/index.js";
 import { v4 as uuidv4 } from "uuid";
+import { getProjectKnowledgeContext } from "./ragflowService.js";
 
 const SCENE_COUNT_MAP: Record<number, { min: number; max: number; duration: number }> = {
   30: { min: 4, max: 6, duration: 7 },
@@ -10,6 +11,7 @@ const SCENE_COUNT_MAP: Record<number, { min: number; max: number; duration: numb
 };
 
 export async function generateBriefWithLLM(project: Project): Promise<VideoBrief> {
+  const knowledgeContext = await getProjectKnowledgeContext(project);
   const prompt = `你是一名专业的音乐视频策划专家。请根据以下项目信息生成一份视频策划案，必须以 JSON 格式返回。
 
 项目信息：
@@ -19,6 +21,9 @@ export async function generateBriefWithLLM(project: Project): Promise<VideoBrief
 - 目标平台：${project.targetPlatforms.join(", ")}
 - 视频风格：${project.style}
 - 目标语言：${project.targetLanguage}
+
+艺人知识库初始资料：
+${knowledgeContext || "暂无外部知识库资料，请基于项目配置生成。"}
 
 请生成包含以下字段的 JSON：
 {
@@ -95,6 +100,7 @@ export async function generateBriefWithLLM(project: Project): Promise<VideoBrief
 export async function generateScenesWithLLM(project: Project, brief: VideoBrief): Promise<Scene[]> {
   const config = SCENE_COUNT_MAP[project.durationSeconds] ?? { min: 8, max: 10, duration: 7 };
   const sceneCount = Math.floor((config.min + config.max) / 2);
+  const knowledgeContext = await getProjectKnowledgeContext(project);
 
   const prompt = `你是专业的 AI 视频分镜脚本编写专家。请根据以下信息生成 ${sceneCount} 个分镜，必须以 JSON 数组格式返回。
 
@@ -106,6 +112,9 @@ export async function generateScenesWithLLM(project: Project, brief: VideoBrief)
 - 视频风格：${project.style}
 - 视频比例：${project.aspectRatio}
 - 每个镜头时长：约 ${config.duration} 秒
+
+艺人知识库初始资料：
+${knowledgeContext || "暂无外部知识库资料，请基于项目配置和策划案生成。"}
 
 每个分镜必须包含：
 - order: 镜头序号（从1开始）

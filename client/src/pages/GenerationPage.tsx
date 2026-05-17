@@ -32,7 +32,7 @@ export default function GenerationPage() {
 
   // ── Timer hook ─────────────────────────────────────────────────────────────
   const scenes = [...(project?.scenes ?? [])].sort((a, b) => a.order - b.order);
-  const isMock = settings?.mockMode ?? true;
+  const isMock = settings?.mockMode ?? false;
 
   const timerState = useGenerationTimer(scenes, polling, isMock);
 
@@ -234,10 +234,11 @@ export default function GenerationPage() {
             variant="outline"
             size="icon"
             onClick={() => setPolling((v) => !v)}
-            className="border-border w-10 h-10 flex-shrink-0"
-            title={polling ? "暂停轮询" : "恢复轮询"}
+            disabled={processingCount === 0}
+            className={`border-border w-10 h-10 flex-shrink-0 ${polling && processingCount > 0 ? "animate-pulse" : ""}`}
+            title={processingCount === 0 ? "暂无运行任务" : polling ? "暂停轮询" : "恢复轮询"}
           >
-            {polling ? <Pause size={14} /> : <Play size={14} />}
+            {processingCount === 0 ? <Pause size={14} /> : polling ? <Pause size={14} /> : <Play size={14} />}
           </Button>
 
           <Button
@@ -266,7 +267,7 @@ export default function GenerationPage() {
         {!isMock && processingCount > 0 && (
           <div className="rounded-xl bg-[oklch(0.78_0.18_85/0.06)] border border-[oklch(0.78_0.18_85/0.2)] px-3 py-2">
             <p className="text-[10px] text-[oklch(0.78_0.18_85)] leading-relaxed">
-              <span className="font-semibold">提示：</span>Real API 生成通常需要 1-5 分钟。若长时间停留在排队状态，可能是服务商队列繁忙，请耐心等待或切换至 Mock Mode 演示。
+              <span className="font-semibold">提示：</span>Real API 生成通常需要 1-5 分钟。若长时间停留在排队状态，可能是服务商队列繁忙，请耐心等待或调整模型配置。
             </p>
           </div>
         )}

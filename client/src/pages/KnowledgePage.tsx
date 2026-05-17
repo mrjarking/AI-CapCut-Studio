@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useParams } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
@@ -13,6 +13,10 @@ export default function KnowledgePage() {
   const { data: artists, isLoading: artistsLoading, isError: artistsError, refetch: refetchArtists } = trpc.media.artists.useQuery();
 
   const [selected, setSelected] = useState<string[]>(project?.selectedKnowledgeModules ?? []);
+
+  useEffect(() => {
+    if (project) setSelected(project.selectedKnowledgeModules);
+  }, [project?.id]);
 
   const updateMutation = trpc.projects.update.useMutation({
     onSuccess: () => navigate(`/projects/${id}/assets`),
