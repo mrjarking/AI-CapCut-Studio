@@ -27,9 +27,56 @@ import {
   getAllTasks,
 } from "./services/videoGenerationService.js";
 import { stitchVideos } from "./services/stitchService.js";
-import { MOCK_ARTISTS, MOCK_ASSETS, MOCK_TEMPLATES } from "./services/mockDataService.js";
+import { MOCK_TEMPLATES } from "./services/mockDataService.js";
 import { generateBriefWithLLM, generateScenesWithLLM } from "./services/generativeService.js";
 import axios from "axios";
+import { getArtistsWithRagKnowledge } from "./services/ragflowService.js";
+import { getAllAssets } from "./services/assetService.js";
+
+const VIDEO_PROVIDERS = ["veo3", "google_veo", "seedance", "mock"] as const;
+
+function getGoogleVeoBaseUrl() {
+  return "https://generativelanguage.googleapis.com/v1beta";
+}
+
+function normalizeBaseUrl(baseUrl: string) {
+  return baseUrl.replace(/\/+$/, "");
+}
+
+async function fetchOpenAIStyleModels(baseUrl: string, token: string) {
+  const resp = await axios.get(`${normalizeBaseUrl(baseUrl)}/v1/models`, {
+    headers: { Authorization: `Bearer ${token}` },
+    timeout: 15000,
+  });
+  const data = Array.isArray(resp.data?.data) ? resp.data.data : [];
+  return data
+    .map((item: unknown) => {
+      if (typeof item === "string") return item;
+      if (item && typeof item === "object") return String((item as Record<string, unknown>).id ?? "");
+      return "";
+    })
+    .filter(Boolean);
+}
+
+async function fetchGoogleVeoModels(token: string) {
+  const resp = await axios.get(`${getGoogleVeoBaseUrl()}/models`, {
+    params: { key: token },
+    timeout: 15000,
+  });
+  const models = Array.isArray(resp.data?.models) ? resp.data.models : [];
+  return models
+    .map((item: unknown) => {
+      if (!item || typeof item !== "object") return "";
+      const model = item as Record<string, unknown>;
+      const name = String(model.name ?? "").replace(/^models\//, "");
+      const methods = Array.isArray(model.supportedGenerationMethods)
+        ? model.supportedGenerationMethods.map(String)
+        : [];
+      const supportsVideo = methods.some((method) => method.toLowerCase().includes("predictlongrunning"));
+      return supportsVideo || name.toLowerCase().includes("veo") ? name : "";
+    })
+    .filter(Boolean);
+}
 
 // ─── Settings Router ──────────────────────────────────────────────────────────
 
@@ -43,7 +90,7 @@ const settingsRouter = router({
       z.object({
         apiBaseUrl: z.string().optional(),
         apiToken: z.string().optional(),
-        apiProvider: z.enum(["veo3", "google_veo", "mock"]).optional(),
+        apiProvider: z.enum(VIDEO_PROVIDERS).optional(),
         defaultModel: z.string().optional(),
         mockMode: z.boolean().optional(),
         watermark: z.string().optional(),
@@ -71,8 +118,17 @@ const settingsRouter = router({
     if (settings.mockMode) {
       return { success: true, message: "Mock Mode 连接成功" };
     }
-    if (!settings.apiBaseUrl || !settings.apiToken) {
+    if (!settings.apiToken || (settings.apiProvider !== "google_veo" && !settings.apiBaseUrl)) {
       return { success: false, message: "API Base URL 或 Token 未配置" };
+    }
+    if (settings.apiProvider === "google_veo") {
+      try {
+        await fetchGoogleVeoModels(settings.apiToken);
+        return { success: true, message: "Google Veo API 连接成功" };
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        return { success: false, message: `连接失败: ${msg}` };
+      }
     }
     try {
       await axios.get(`${settings.apiBaseUrl}/api/v1/veo/health`, {
@@ -98,6 +154,39 @@ const settingsRouter = router({
     await clearSettings();
     return { success: true };
   }),
+
+  listModels: publicProcedure
+    .input(
+      z.object({
+        apiProvider: z.enum(VIDEO_PROVIDERS).optional(),
+        apiBaseUrl: z.string().optional(),
+        apiToken: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const settings = await getSettings();
+      const provider = input.apiProvider ?? settings.apiProvider;
+      const token = input.apiToken || settings.apiToken;
+      const baseUrl = input.apiBaseUrl || settings.apiBaseUrl;
+
+      if (provider === "mock") {
+        return { models: ["mock"] };
+      }
+      if (!token) {
+        return { models: [], message: "请先填写 API Token" };
+      }
+      if (provider === "google_veo") {
+        const models = await fetchGoogleVeoModels(token);
+        return {
+          models: models.length ? models : ["veo-3.1-fast-generate-preview"],
+        };
+      }
+      if (!baseUrl) {
+        return { models: [], message: "请先填写 API Base URL" };
+      }
+      const models = await fetchOpenAIStyleModels(baseUrl, token);
+      return { models };
+    }),
 });
 
 // ─── Projects Router ──────────────────────────────────────────────────────────
@@ -195,7 +284,7 @@ const videoRouter = router({
   generate: publicProcedure
     .input(
       z.object({
-        provider: z.enum(["veo3", "veo3_fast", "google_veo", "mock"]),
+        provider: z.enum(["veo3", "veo3_fast", "google_veo", "seedance", "mock"]),
         projectId: z.string(),
         sceneId: z.string(),
         prompt: z.string(),
@@ -273,8 +362,8 @@ const videoRouter = router({
 // ─── Media Router ─────────────────────────────────────────────────────────────
 
 const mediaRouter = router({
-  artists: publicProcedure.query(() => MOCK_ARTISTS),
-  assets: publicProcedure.query(() => MOCK_ASSETS),
+  artists: publicProcedure.query(() => getArtistsWithRagKnowledge()),
+  assets: publicProcedure.query(() => getAllAssets()),
   templates: publicProcedure.query(() => MOCK_TEMPLATES),
 });
 

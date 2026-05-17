@@ -102,3 +102,7 @@
 - [x] 排查艺人清单加载失败的根本原因：DashboardPage 未预加载 artists，导致进入 NewProjectPage 时需重新请求
 - [x] 排查设置保存 "don't match" 错误：使用 Record<string, unknown> 类型导致 tRPC 类型不匹配
 - [x] 修复：DashboardPage 预加载 artists；修复 SettingsPage/SetupPage 使用精确类型调用 saveMutation
+
+## Bug 修复：生产环境 API 路由问题（新需求）
+- [x] 排查生产环境 /api/trpc 返回 HTML 的根本原因：server/index.ts 是简化版服务器，没有 tRPC 路由：通配符路由 app.get('*') 拦截了 API 请求
+- [x] 修复生产环境服务器：1) server/index.ts 改为转发完整服务器 2) _core/index.ts 通配符排除 /api/ 路径：将通配符改为正则排除 /api/ 路径

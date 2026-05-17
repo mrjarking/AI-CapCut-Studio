@@ -6,9 +6,9 @@ const SETTINGS_FILE = "settings.local.json";
 const DEFAULT_SETTINGS: AppSettings = {
   apiBaseUrl: "",
   apiToken: "",
-  apiProvider: "mock",
-  defaultModel: "mock",
-  mockMode: true,
+  apiProvider: "google_veo",
+  defaultModel: "veo-3.1-fast-generate-preview",
+  mockMode: false,
   watermark: "CisuMusic",
   generateAudio: true,
   seed: null,
@@ -45,10 +45,16 @@ export async function saveSettings(partial: Partial<AppSettings>): Promise<AppSe
   const updated: AppSettings = {
     ...current,
     ...partial,
-    isConfigured: !!(partial.apiBaseUrl ?? current.apiBaseUrl) || (partial.mockMode ?? current.mockMode),
+    isConfigured: isConfigured({ ...current, ...partial }),
   };
   await writeJson(SETTINGS_FILE, updated);
   return updated;
+}
+
+function isConfigured(settings: AppSettings): boolean {
+  if (settings.mockMode) return true;
+  if (settings.apiProvider === "google_veo") return !!settings.apiToken;
+  return !!settings.apiBaseUrl && !!settings.apiToken;
 }
 
 export async function clearSettings(): Promise<void> {

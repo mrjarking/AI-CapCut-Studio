@@ -1,6 +1,6 @@
 // ─── AI Provider Types ───────────────────────────────────────────────────────
 
-export type AIProvider = "veo3" | "veo3_fast" | "google_veo" | "mock";
+export type AIProvider = "veo3" | "veo3_fast" | "google_veo" | "seedance" | "mock";
 
 export type VideoTaskStatus =
   | "queued"
@@ -58,7 +58,7 @@ export interface VideoStatusResponse {
 export interface AppSettings {
   apiBaseUrl: string;
   apiToken: string;
-  apiProvider: "veo3" | "google_veo" | "mock";
+  apiProvider: "veo3" | "google_veo" | "seedance" | "mock";
   defaultModel: string; // flexible model name, e.g. "veo3", "veo3_fast", "veo3.1-fast", "mock"
   mockMode: boolean;
   watermark: string;

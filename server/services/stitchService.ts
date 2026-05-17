@@ -3,14 +3,13 @@ import fs from "fs-extra";
 import { fileURLToPath } from "url";
 import axios from "axios";
 import ffmpeg from "fluent-ffmpeg";
+import { pipeline } from "stream/promises";
 import type { StitchRequest, StitchResponse } from "../types/index.js";
+import { requireFfmpegPath } from "../_core/ffmpegPath.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PUBLIC_DIR = path.resolve(__dirname, "../../public");
-
-// Use system ffmpeg
-ffmpeg.setFfmpegPath("/usr/bin/ffmpeg");
 
 async function downloadSegment(url: string, destPath: string): Promise<void> {
   if (url.startsWith("/static/")) {
@@ -24,8 +23,11 @@ async function downloadSegment(url: string, destPath: string): Promise<void> {
   }
 
   // Remote URL
-  const resp = await axios.get(url, { responseType: "arraybuffer", timeout: 60000 });
-  await fs.writeFile(destPath, Buffer.from(resp.data));
+  const resp = await axios.get(url, {
+    responseType: "stream",
+    timeout: 5 * 60 * 1000,
+  });
+  await pipeline(resp.data, fs.createWriteStream(destPath));
 }
 
 function runFfmpegConcat(concatFile: string, outputFile: string, reencode = false): Promise<void> {
@@ -50,6 +52,17 @@ function runFfmpegConcat(concatFile: string, outputFile: string, reencode = fals
 
 export async function stitchVideos(req: StitchRequest): Promise<StitchResponse> {
   const { projectId, sceneVideoUrls, outputFileName = "final.mp4" } = req;
+  let ffmpegPath: string;
+  try {
+    ffmpegPath = requireFfmpegPath();
+    ffmpeg.setFfmpegPath(ffmpegPath);
+  } catch (err) {
+    return {
+      projectId,
+      status: "failed",
+      errorMessage: err instanceof Error ? err.message : String(err),
+    };
+  }
 
   const segmentsDir = path.join(PUBLIC_DIR, "generated", projectId, "segments");
   const stitchedDir = path.join(PUBLIC_DIR, "stitched", projectId);
