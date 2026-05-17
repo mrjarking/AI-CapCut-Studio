@@ -305,5 +305,38 @@
     "updatedAt": 1778926067382,
     "retryCount": 0,
     "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/mxbvswzmw5kb:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
+  },
+  {
+    "taskId": "models/veo-3.1-fast-generate-preview/operations/j7l5o4ifvml8",
+    "projectId": "3de6f5b5-9301-41fd-b219-f306833eff28",
+    "sceneId": "9a63bb17-fdd7-41aa-8208-33c69e7ea189",
+    "provider": "google_veo",
+    "status": "completed",
+    "createdAt": 1778940485116,
+    "updatedAt": 1778940552581,
+    "retryCount": 0,
+    "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/xyigadanyj7n:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
+  },
+  {
+    "taskId": "models/veo-3.1-fast-generate-preview/operations/qdvl2lxi6h5r",
+    "projectId": "3de6f5b5-9301-41fd-b219-f306833eff28",
+    "sceneId": "c382f4a8-b338-40ad-82d2-e0dc91147a96",
+    "provider": "google_veo",
+    "status": "completed",
+    "createdAt": 1778940577488,
+    "updatedAt": 1778940646944,
+    "retryCount": 0,
+    "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/zjjjj1jo7mko:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
+  },
+  {
+    "taskId": "models/veo-3.1-fast-generate-preview/operations/adfqv861iaoo",
+    "projectId": "3de6f5b5-9301-41fd-b219-f306833eff28",
+    "sceneId": "872e5998-675e-4d10-bdfa-9fbc1aaa6285",
+    "provider": "google_veo",
+    "status": "completed",
+    "createdAt": 1778940752145,
+    "updatedAt": 1778940819718,
+    "retryCount": 0,
+    "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/8leaprxnm1ot:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
   }
 ]

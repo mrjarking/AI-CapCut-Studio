@@ -815,7 +815,7 @@
         "order": 1,
         "startTime": 0,
         "endTime": 7,
-        "goal": "开场吸引",
+        "goal": "开场",
         "visualDescription": "镜头 1：艺人在霓虹灯舞台上登场，光效炫目",
         "prompt": "A cinematic vertical 9:16 fan support shot of Korean fashion rock band 2Z, high fashion styling, neon stage, walking through a futuristic digital stage, slow push-in from wide shot to medium shot, neon light trails reacting to music, CisuMusic Web3 music platform mood, high quality, social media ready, 30fps, clean composition.",
         "negativePrompt": "low quality, distorted face, extra fingers, unreadable text, wrong logo, watermark, flickering, unstable character identity, overexposed, bad anatomy, broken hands, duplicated face, messy background, random text, deformed body.",
@@ -862,8 +862,10 @@
         "musicSuggestion": "使用艺人代表作作为背景音乐",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "completed",
+        "retryCount": 0,
+        "taskId": "models/veo-3.1-fast-generate-preview/operations/j7l5o4ifvml8",
+        "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/xyigadanyj7n:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
       },
       {
         "id": "c382f4a8-b338-40ad-82d2-e0dc91147a96",
@@ -879,8 +881,10 @@
         "musicSuggestion": "使用艺人代表作作为背景音乐",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "completed",
+        "retryCount": 0,
+        "taskId": "models/veo-3.1-fast-generate-preview/operations/qdvl2lxi6h5r",
+        "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/zjjjj1jo7mko:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
       },
       {
         "id": "872e5998-675e-4d10-bdfa-9fbc1aaa6285",
@@ -896,13 +900,15 @@
         "musicSuggestion": "使用艺人代表作作为背景音乐",
         "assetsUsed": [],
         "recommendedModel": "veo3",
-        "status": "idle",
-        "retryCount": 0
+        "status": "completed",
+        "retryCount": 0,
+        "taskId": "models/veo-3.1-fast-generate-preview/operations/adfqv861iaoo",
+        "videoUrl": "https://generativelanguage.googleapis.com/v1beta/files/8leaprxnm1ot:download?alt=media&key=AIzaSyBAdo4ennpaXIs5bMlaZAWMMwNzCQsDfwc"
       }
     ],
     "status": "storyboard",
     "createdAt": 1778924683868,
-    "updatedAt": 1778926067384,
+    "updatedAt": 1778940908607,
     "brief": {
       "title": "2Z - 30秒宣发视频",
       "coreSellingPoints": [
