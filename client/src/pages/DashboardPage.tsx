@@ -30,7 +30,7 @@ export default function DashboardPage() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[oklch(0.6_0.28_290)] to-[oklch(0.7_0.22_200)] flex items-center justify-center">
               <Zap size={16} className="text-white" />
             </div>
-            <span className="text-xs text-muted-foreground font-medium">CisuMusic</span>
+            <span className="text-xs text-muted-foreground font-medium">AiCapCut</span>
           </div>
           <h1 className="text-2xl font-bold gradient-text leading-tight" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
             AI Video Studio

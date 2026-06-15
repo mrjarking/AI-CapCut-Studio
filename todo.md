@@ -106,3 +106,7 @@
 ## Bug 修复：生产环境 API 路由问题（新需求）
 - [x] 排查生产环境 /api/trpc 返回 HTML 的根本原因：server/index.ts 是简化版服务器，没有 tRPC 路由：通配符路由 app.get('*') 拦截了 API 请求
 - [x] 修复生产环境服务器：1) server/index.ts 改为转发完整服务器 2) _core/index.ts 通配符排除 /api/ 路径：将通配符改为正则排除 /api/ 路径
+
+## Bug 修复：SetupPage 跳转 + 素材上传显示（新需求）
+- [x] 修复 SetupPage 保存后不跳转到首页、底部菜单不出现
+- [x] 修复素材页上传图片成功但不显示

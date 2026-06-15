@@ -23,6 +23,7 @@ const TYPE_LABELS: Record<string, string> = {
 export default function AssetsPage() {
   const { id } = useParams<{ id: string }>();
   const [, navigate] = useLocation();
+  const utils = trpc.useUtils();
   const { data: assets, refetch: refetchAssets } = trpc.media.assets.useQuery();
   const { data: project } = trpc.projects.get.useQuery({ id });
 
@@ -30,6 +31,7 @@ export default function AssetsPage() {
   const [search, setSearch] = useState("");
   const [filterType, setFilterType] = useState<string>("all");
   const [uploading, setUploading] = useState(false);
+  const [failedImages, setFailedImages] = useState<string[]>([]);
 
   const updateMutation = trpc.projects.update.useMutation({
     onSuccess: () => navigate(`/projects/${id}/brief`),
@@ -64,6 +66,8 @@ export default function AssetsPage() {
       if (!resp.ok) throw new Error(await resp.text());
       const data = await resp.json();
       if (data.asset?.id) setSelected((prev) => [data.asset.id, ...prev]);
+      // Clear media.assets cache to ensure fresh data
+      await utils.media.assets.invalidate();
       await refetchAssets();
       toast.success("图片素材已上传");
     } catch (err) {
@@ -135,12 +139,19 @@ export default function AssetsPage() {
                 }`}
               >
                 <div className="relative aspect-square bg-[oklch(0.12_0.012_285)]">
-                  <img
-                    src={asset.url}
-                    alt={asset.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
+                  {failedImages.includes(asset.id) ? (
+                    <div className="w-full h-full flex items-center justify-center bg-[oklch(0.12_0.012_285)] text-[10px] text-muted-foreground">
+                      图片加载失败
+                    </div>
+                  ) : (
+                    <img
+                      src={asset.url}
+                      alt={asset.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      onError={() => setFailedImages((prev) => prev.includes(asset.id) ? prev : [...prev, asset.id])}
+                    />
+                  )}
                   {isSelected && (
                     <div className="absolute inset-0 bg-[oklch(0.6_0.28_290/0.3)] flex items-center justify-center">
                       <CheckCircle2 size={24} className="text-white" />

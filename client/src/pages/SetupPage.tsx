@@ -17,6 +17,7 @@ const DEFAULT_MODEL_BY_PROVIDER: Record<VideoProvider, string> = {
 
 export default function SetupPage() {
   const [, navigate] = useLocation();
+  const utils = trpc.useUtils();
   const [showToken, setShowToken] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [form, setForm] = useState({
@@ -32,8 +33,12 @@ export default function SetupPage() {
   const [modelMessage, setModelMessage] = useState("填写 API Token 后自动拉取模型列表");
 
   const saveMutation = trpc.settings.save.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("配置已保存");
+      // Clear settings cache and fetch fresh data to ensure DashboardPage gets updated isConfigured state
+      await utils.settings.get.invalidate();
+      // Fetch fresh data to populate cache before navigation
+      await utils.settings.get.fetch();
       navigate("/");
     },
     onError: (err) => toast.error(`保存失败: ${err.message}`),

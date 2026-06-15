@@ -394,9 +394,9 @@
         "retryCount": 0
       }
     ],
-    "status": "storyboard",
+    "status": "completed",
     "createdAt": 1778863519170,
-    "updatedAt": 1778864471021,
+    "updatedAt": 1779027665594,
     "brief": {
       "title": "2Z新歌60秒KPOP MV预告：心跳节奏，视觉盛宴",
       "coreSellingPoints": [
@@ -420,10 +420,11 @@
       "musicSuggestion": "使用2Z新歌的Intro、高潮部分和标志性Hook，确保音乐在60秒内能完整呈现新歌的精髓和记忆点。",
       "socialMediaTips": "发布时可带上#2Z新歌 #KPOP #新歌速递 #2Z挑战 等热门话题标签；鼓励粉丝参与新歌舞蹈挑战；发布成员幕后花絮或预告片，增加互动。",
       "ctaSuggestion": "“点击链接预购新歌！” “在评论区告诉我你最喜欢哪句歌词！” “关注2Z官方账号，获取更多新歌资讯！”"
-    }
+    },
+    "finalVideoUrl": "/static/stitched/fbb1dc12-4a0f-451c-8bec-8a27059a6558/final.mp4"
   },
   {
-    "name": "2Z新歌",
+    "name": "Music",
     "userRole": "operator",
     "artistId": "2z",
     "artistName": "2Z",
@@ -647,7 +648,7 @@
     }
   },
   {
-    "name": "2Z CrossRoads",
+    "name": "MV",
     "userRole": "operator",
     "artistId": "2z",
     "artistName": "2Z",
@@ -787,7 +788,7 @@
     }
   },
   {
-    "name": "2Z 参与粉丝见面会",
+    "name": "粉丝见面会",
     "userRole": "fan_operator",
     "artistId": "2z",
     "artistName": "2Z",
